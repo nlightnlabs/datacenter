@@ -96,7 +96,7 @@ const FloatingPanel = (props) => {
             className="d-flex align-items-center me-2" 
             style={{height: "30px", width:"30px", pointer:"cursor"}}
             onClick={(e)=>displayPanel(false)}>
-            <Svg iconName={"CloseIcon"}/>
+            <Svg iconName={"CloseIcon"} fillColor="black"/>
           </div>
 
         </div>

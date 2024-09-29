@@ -21,10 +21,8 @@ const Home = () => {
   }
 
   return (
-    <div className="w-100 p-3 fade-in" style={pageStyle}>
-        <div className="d-flex w-100 p-3">
-           <Room />
-        </div>
+    <div className="w-full p-[20px] fade-in" style={pageStyle}>
+        <Room />
     </div>
   )
 }

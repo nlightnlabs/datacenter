@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import PlanView from "./PlanView";
 import RackElevationView from "./RackElevationView";
-import ServerDetails from "./ServerDetails";
+import ServersTable from "./ServersTable";
 import serverData from './data_center_servers.json';
 import ThreeDView from './ThreeDView'
 import MultiInput from "./MultiInput";
+import ServerDetails from "./ServerDetails";
 
 // Main Application Component
 const Room = (props) => {
@@ -39,8 +40,8 @@ const Room = (props) => {
       let rack = {
         id: item,
         location: serverData.filter(i=>i.rack_id ===item)[0].rack_location,
-        x: serverData.filter(i=>i.rack_id ===item)[0].column,
-        z: serverData.filter(i=>i.rack_id ===item)[0].row,
+        column: serverData.filter(i=>i.rack_id ===item)[0].column,
+        row: serverData.filter(i=>i.rack_id ===item)[0].row,
         manufacturer: serverData.filter(i=>i.rack_id ===item)[0].rack_manufacturer,
         model: serverData.filter(i=>i.rack_id ===item)[0].rack_model,
         height: serverData.filter(i=>i.rack_id ===item)[0].rack_height,
@@ -64,6 +65,8 @@ const Room = (props) => {
   },[])
 
   useEffect(()=>{
+
+    console.log(selectedServer)
     
     if(selectedServer !=null){
       const selected_rack_id = serverData.find(i=>i.id === selectedServer.id).rack_id
@@ -78,12 +81,12 @@ const Room = (props) => {
 
 
   return (
-    <div className="flex flex-col w-full h-100 flex-wrap">
+    <div className="flex flex-col w-full h-100">
       
-    <div className="flex text-[32px] w-1/2">
+    <div className="flex text-[24px] w-1/2">
       <div className="text-gray-400">Room:</div> 
       <div className="ms-3 font-bold">
-        <select onChange={handleRoomChange} value={selectedRoom}>
+        <select className="w-[300px]" onChange={handleRoomChange} value={selectedRoom}>
           {rooms.map((item,index)=>(
             <option className="ps-3 me-3 text-[18px]" key={index} value={item}>{item}</option>
           ))}
@@ -96,7 +99,7 @@ const Room = (props) => {
         <div className="flex w-full mb-3 h-[500px]">
 
           <div 
-            className={`"flex flex-col ${selectedRack ? 'w-2/3': 'w-full'} border-[1px] rounded-md border-gray-200 shadow-md transition duration-500"`}
+            className={`"flex flex-col ${selectedRack ? 'w-2/3': 'w-full'} w-min-1/2 border-[1px] rounded-md border-gray-200 shadow-md transition duration-500"`}
           >
 
             <div className="flex justify-end flex-wrap">
@@ -136,7 +139,7 @@ const Room = (props) => {
 
           {selectedRack &&
             <div 
-              className="w-max-1/3 flex flex-col border-[1px] rounded-md border-gray-200 shadow-md ms-3"
+              className="w-1/3 flex flex-col border-[1px] rounded-md border-gray-200 shadow-md ms-3"
               style={{transition: "0.5s"}} 
             >  
                 <RackElevationView 
@@ -148,11 +151,22 @@ const Room = (props) => {
             </div>
           }
         </div>
+        
+        <div className="flex h-[300px] w-full transition duration-500">
 
-        <div className="flex h-[300px]" style={{transition: "0.5s"}} >
-          <ServerDetails
-            setSelectedServer = {setSelectedServer}
-          />
+          <div className={`"flex flex-col ${selectedServer ? 'w-2/3': 'w-full'} w-min-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500"`} >
+              <ServersTable
+                setSelectedServer = {setSelectedServer}
+              />
+          </div>
+
+          {selectedServer &&
+            <div 
+              className="flex flex-col w-1/3 w-min-[300px] overflow-hidden border-[1px] rounded-md border-gray-200 shadow-md ms-3">
+              <ServerDetails selectedServer={selectedServer}/>
+            </div>
+          }
+
         </div>
     </div>
   </div>

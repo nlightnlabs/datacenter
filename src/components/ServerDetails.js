@@ -1,56 +1,83 @@
-import React, {useState, useEffect} from 'react'
-import servers from './data_center_servers.json'
-import { toProperCase } from '../functions/formatValue';
+import React, {useState, useEffect} from "react";
+import { toProperCase } from "../functions/formatValue";
+import FloatingPanel    from './FloatingPanel'
 
-import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
-import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
-import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
+// Rack Elevation View Functional Component
+const ServerDetails = ({selectedServer}) => {
 
+    const [showFloatingPanel, setShowFloatingPanel] = useState(false)
 
-const ServerDetails = (props) => {
+    const fielsToHide =[
+        "rack_model",
+        "rack_location",
+        "row",
+        "column",
+        "grid_x",
+        "grid_z",
+        "x",
+        "y",
+        "z",
+        "rack_manufacturer",
+        "rack_photo",
+        "rack_height",
+        "rack_width",
+        "rack_depth",
+        "rack_description",
+        "rack_photo",
+    ]
 
-    const [tableData, setTableData] = useState([]);
-    const [fields, setFields] = useState([])
-    const [recordId, setSelectedRecordId] = useState(0)
-    const [showRecordDetails, setShowRecordDetails] = useState(false)
-
-    
-    const getTableData = ()=>{
-
-      let fieldList = []
-        if(servers.length>0){
-          Object.keys(servers[0]).map((field,index)=>{
-            fieldList.push({headerName: toProperCase(field.replaceAll("_"," ")), field: field, filter: true})
-        })
-          setFields(fieldList)
-        }
-
-        setTableData(servers.sort((a, b) => {
-          return  b.id-a.id;
-        }));
-
-      }
-      
-  useEffect(()=>{
-    getTableData()
-  },[])
-
-
-    const onCellClicked = (e) => {
-      setSelectedRecordId(e.data.id)
-      setShowRecordDetails(true)
-      props.setSelectedServer(e.data)
-    }
-  
   return (
-      <div className="ag-theme-quartz animate__animated animate__fadeIn animate__duration-0.5s" style={{fontSize:"12px", height: "100%", width: "100%" }}>
-        <AgGridReact 
-          rowData={tableData} 
-          columnDefs={fields} 
-          onCellClicked={onCellClicked}
-        />
-    </div>
-  )
-}
+    <div className="flex flex-col w-full h-100 overflow-scroll">
+      {selectedServer != null && 
+        <div className="font-bold text-[18px] w-full h-[40px] items-center mb-3 text-center bg-gray-100">Server Details</div>
+      }
 
-export default ServerDetails
+    <div className="flex w-full h-[40px] p-2 justify-end">
+      <button 
+        className="bg-yellow-500 text-[12px] text-white h-[30px] ps-2 pe-2 rounded cursor-pointer"
+        onClick = {(e)=>setShowFloatingPanel(true)}
+        >
+            Modify
+        </button>
+
+        <button 
+            className="bg-red-600 text-[12px] text-white h-[30px] ms-3 ps-2 pe-2 rounded cursor-pointer"
+            onClick = {(e)=>setShowFloatingPanel(true)}
+        >
+            Decommission
+        </button>
+    </div>
+
+    <div className="flex flex-col w-full p-2 h-100 overflow-y-scroll">
+      <table className="text-[12px]">
+      <tbody>
+      {Object.entries(selectedServer).map(([k,v],index)=>(
+        !fielsToHide.includes(k) && 
+        (<tr key={index} className="border-b">
+          <td className="text-left h-[25px] text-gray-500 p-1 w-1/4">{toProperCase(k.replace("_"," "))}</td>
+          <td className="text-left h-[25px] text-blue-600 p-1">{v}</td>
+        </tr>)
+      ))}
+      </tbody>
+      </table>
+
+      {/* <div className="p-3 w-full">
+        <img src={`server_photos/${selectedRack.photo}`} alt="Rack Photo" />
+      </div> */}
+
+    </div>
+
+    {showFloatingPanel &&
+        <div className="absolute left-0 top-0 h-100 w-full bg-[rgba(0,0,0,0.5)] z-50">
+            <FloatingPanel displayPanel={setShowFloatingPanel} headerColor="rgb(255,255,255)" headerTextColor="rgba(0,0,0,0)">
+                <div className="flex h-[150px] w-[300px] text-[24px] text-bold text-red-600 text-center justify-center items-center">This will trigger a workflow</div>
+            </FloatingPanel>
+        </div>
+    }
+    
+    </div>
+    
+  );
+};
+
+export default ServerDetails;

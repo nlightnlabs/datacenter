@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import serverData from './data_center_servers.json';
 import { toProperCase } from "../functions/formatValue";
+import FloatingPanel from "./FloatingPanel";
 
 // Rack Elevation View Functional Component
 const RackElevationView = (props) => {
@@ -10,6 +11,8 @@ const RackElevationView = (props) => {
   const [selectedServer, setSelectedServer] = useState(props.selectedServer);
 
   const [showStatus, setShowStatus] = useState(true)
+  const [showFloatingPanel, setShowFloatingPanel] = useState(false)
+
 
   const getServers = (selectedRack, selectedServer) => {
     if (selectedRack != null && serverData.length > 0 && selectedServer != null) {
@@ -30,10 +33,27 @@ const RackElevationView = (props) => {
 
 
   return (
-    <div className="overflow-y-scroll p-2">
+    <div className="overflow-y-scroll">
       {selectedRack != null && 
-        <div className="font-bold w-full mb-3 text-center">Rack Elevation</div>
+        <div className="flex h-[40px] justify-center items-center font-bold text-[18px] w-full mb-2 text-center bg-gray-100">Rack Details</div>
       }
+
+    <div className="flex w-full h-[30px] pe-2 justify-end">
+      <button 
+        className="bg-yellow-500 text-[12px] text-white h-[30px] ps-2 pe-2 rounded cursor-pointer"
+        onClick = {(e)=>setShowFloatingPanel(true)}
+        >
+            Modify
+        </button>
+
+        <button 
+            className="bg-red-600 text-[12px] text-white h-[30px] ms-3 ps-2 pe-2 rounded cursor-pointer"
+            onClick = {(e)=>setShowFloatingPanel(true)}
+        >
+            Decommission
+        </button>
+    </div>
+
 
     <div className="flex justify-between">
     
@@ -71,10 +91,11 @@ const RackElevationView = (props) => {
       <table className="text-[12px]">
       <tbody>
       {Object.entries(selectedRack).map(([k,v],index)=>(
-        <tr key={index} className="border-b">
+        !["column", "row"].includes(k) && 
+        (<tr key={index} className="border-b">
           <td className="text-left h-[25px] text-gray-500 p-1">{toProperCase(k)}</td>
           <td className="text-left h-[25px] text-blue-600 p-1">{v}</td>
-        </tr>
+        </tr>)
       ))}
       </tbody>
       </table>
@@ -85,6 +106,15 @@ const RackElevationView = (props) => {
     </div>
         
     </div>
+
+    {showFloatingPanel &&
+        <div className="absolute left-0 top-0 h-100 w-full bg-[rgba(0,0,0,0.5)] z-50">
+            <FloatingPanel displayPanel={setShowFloatingPanel} headerColor="rgb(255,255,255)" headerTextColor="rgba(0,0,0,0)">
+                <div className="flex h-[150px] w-[300px] text-[24px] text-bold text-red-600 text-center justify-center items-center">This will trigger a workflow</div>
+            </FloatingPanel>
+        </div>
+    }
+
   </div>
   );
 };
