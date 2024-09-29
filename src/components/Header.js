@@ -44,15 +44,15 @@ const Header = (props) => {
   
 
   return (
-    <div className="d-flex w-100 justify-content-between" style={HeaderStyle}>
+    <div className="flex w-100 justify-between items-center" style={HeaderStyle}>
         
-        <div className="flex w-1/2 ms-3 align-items-center">
+        <div className="flex  w-full md:w-1/2 ms-3 align-items-center">
             <img src={logo} className="h-[30px] w-30px" />
-            <div className="flex text-[24px] text-red-600 ms-1"> Data Center Manager</div>
+            <div className="text-[24px] text-red-600 ms-1"> Data Center Manager</div>
         </div>
 
         <div 
-          className="d-flex position-relative right-0 justify-content-end w-50 align-items-center"
+          className="flex relative right-0 justify-end items-center"
         >
 
         </div>

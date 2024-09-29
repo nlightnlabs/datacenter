@@ -81,7 +81,7 @@ const Room = (props) => {
 
 
   return (
-    <div className="flex flex-col w-full h-100">
+    <div className="flex flex-col w-full h-100 overflow-scroll">
       
     <div className="flex text-[24px] w-1/2">
       <div className="text-gray-400">Room:</div> 
@@ -94,12 +94,12 @@ const Room = (props) => {
       </div>
     </div>
  
-    <div className="w-full">
+    <div className="flex flex-col w-full">
 
-        <div className="flex w-full mb-3 h-[500px]">
+        <div className="flex w-full justify-center flex-wrap">
 
           <div 
-            className={`"flex flex-col ${selectedRack ? 'w-2/3': 'w-full'} w-min-1/2 border-[1px] rounded-md border-gray-200 shadow-md transition duration-500"`}
+            className={`"flex flex-col w-full ${selectedRack ? 'md:w-[60%]': 'md:w-full'} min-w-[500px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500 mb-3"`}
           >
 
             <div className="flex justify-end flex-wrap">
@@ -139,7 +139,7 @@ const Room = (props) => {
 
           {selectedRack &&
             <div 
-              className="w-1/3 flex flex-col border-[1px] rounded-md border-gray-200 shadow-md ms-3"
+              className="flex flex-col w-full md:w-[30%] min-w-[300px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md md:ms-3 mb-3"
               style={{transition: "0.5s"}} 
             >  
                 <RackElevationView 
@@ -152,9 +152,9 @@ const Room = (props) => {
           }
         </div>
         
-        <div className="flex h-[300px] w-full transition duration-500">
+        <div className="flex w-full justify-center flex-wrap">
 
-          <div className={`"flex flex-col ${selectedServer ? 'w-2/3': 'w-full'} w-min-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500"`} >
+          <div className={`"flex flex-col w-full ${selectedServer && 'md:w-[60%]'} min-w-[500px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500"`} >
               <ServersTable
                 setSelectedServer = {setSelectedServer}
               />
@@ -162,7 +162,7 @@ const Room = (props) => {
 
           {selectedServer &&
             <div 
-              className="flex flex-col w-1/3 w-min-[300px] overflow-hidden border-[1px] rounded-md border-gray-200 shadow-md ms-3">
+              className="flex flex-col w-full md:w-[30%] min-w-[300px] h-[500px] overflow-hidden border-[1px] rounded-md border-gray-200 shadow-md md:ms-3 transition duration-500">
               <ServerDetails selectedServer={selectedServer}/>
             </div>
           }

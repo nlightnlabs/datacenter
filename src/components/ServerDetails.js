@@ -29,10 +29,10 @@ const ServerDetails = ({selectedServer}) => {
   return (
     <div className="flex flex-col w-full h-100 overflow-scroll">
       {selectedServer != null && 
-        <div className="font-bold text-[18px] w-full h-[40px] items-center mb-3 text-center bg-gray-100">Server Details</div>
+        <div className="font-bold text-[18px] w-full h-[40px] items-center mb-2 text-center bg-gray-100">Server Details</div>
       }
 
-    <div className="flex w-full h-[40px] p-2 justify-end">
+    <div className="flex w-full h-[40px] pe-2 justify-end">
       <button 
         className="bg-yellow-500 text-[12px] text-white h-[30px] ps-2 pe-2 rounded cursor-pointer"
         onClick = {(e)=>setShowFloatingPanel(true)}
