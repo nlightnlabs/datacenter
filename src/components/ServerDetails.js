@@ -33,7 +33,6 @@ const ServerDetails = (props) => {
       
   useEffect(()=>{
     getTableData()
-    console.log(recordId)
   },[])
 
 

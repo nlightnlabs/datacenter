@@ -47,10 +47,8 @@ const Floor = ({ width, height, depth, x, y, z, color, label, onClick, opacity }
   );
 };
 
-
-
 const Scene = ({servers, setSelectedServer, opacity, highlightStatus, maxDimensions, showLabel, showEdges }) => {
-  console.log(servers)
+ 
   return (
     <>
       {servers.map((server, index) => (
@@ -98,7 +96,7 @@ const View = ({ setSelectedServer, selectedRoom }) => {
   const [maxZ, setMaxZ] = useState(0)
 
   const getServers = ()=>{
-    console.log(selectedRoom)
+    
     if(selectedRoom !=null && selectedRoom !=""){
       let servers = serverData.filter(i=>i.room_name === selectedRoom)
       let maxX = Math.max(...servers.map((server) => server.x))
@@ -277,7 +275,7 @@ const View = ({ setSelectedServer, selectedRoom }) => {
             type="checkbox"
             className="me-1"
             checked={highlightStatus}
-            onClick={(e) => setHighlightStatus(!highlightStatus)}
+            onChange={(e) => setHighlightStatus(!highlightStatus)}
           />
           <label>Show Status</label>
         </div>
@@ -287,7 +285,7 @@ const View = ({ setSelectedServer, selectedRoom }) => {
             type="checkbox"
             className="me-1"
             checked={showEdges}
-            onClick={(e) => setShowEdges(!showEdges)}
+            onChange={(e) => setShowEdges(!showEdges)}
           />
           <label>Show Edges</label>
         </div>

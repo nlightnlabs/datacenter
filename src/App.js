@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useSelector, useDispatch } from 'react-redux';
+import { clearStorage } from './redux/slices/navSlice';
+
 import { setUser, setUserLoggedIn } from './redux/slices/authSlice';
 import { setCurrentPage, setPageList, setMenuItems } from './redux/slices/navSlice';
 import { setAppName, setDbName, setFileStorageBucket, setLogoFile, setTheme} from './redux/slices/envSlice';
@@ -42,7 +44,6 @@ function App() {
       // Ensure the component is rendered before pushing
       return { ...item, component: item.component };
     }));
-    console.log(x);
     setPages(x);
 
     getMenuItems(x)
@@ -53,7 +54,6 @@ function App() {
     await Promise.all(modules.map(item=>{
       delete item.component
     }))
-    console.log(menuItems)
     dispatch(setMenuItems(modules))
   }
 
@@ -64,6 +64,7 @@ function App() {
 
   useEffect(()=>{
 
+    dispatch(clearStorage());
     dispatch(setAppName(appName))
     dispatch(setDbName(dbName))
     dispatch(setFileStorageBucket(fileStorageBucketName))
@@ -71,10 +72,7 @@ function App() {
     dispatch(setTheme(theme))
 
     getPages()
-    
-    console.log(currentPage)
-
-    getUsers()
+    // getUsers()
   },[])
 
   return (
@@ -84,7 +82,7 @@ function App() {
      
         <div className="d-flex w-100" style={{height:"100%"}}>
             <div className="d-flex w-100 justify-content-between" style={{height:"100%"}}>
-                {pageData.find(i=>i.name ===currentPage).component}
+                {pages.length>0 && pageData.find(i=>i.name ===currentPage).component}
                 {/* {menuItems.length>0 && <Menu menuItems={menuItems} colorTheme={theme}/> } */}
             </div>
         </div>

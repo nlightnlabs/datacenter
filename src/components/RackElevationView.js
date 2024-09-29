@@ -12,8 +12,6 @@ const RackElevationView = (props) => {
   const [showStatus, setShowStatus] = useState(true)
 
   const getServers = (selectedRack, selectedServer) => {
-    console.log(selectedRack)
-    console.log(selectedServer)
     if (selectedRack != null && serverData.length > 0 && selectedServer != null) {
       const servers = serverData.filter(i => i.rack_id === selectedRack.id);
       setServers(servers);
@@ -46,7 +44,7 @@ const RackElevationView = (props) => {
             type="checkbox"
             className="m-1"
             checked={showStatus}
-            onClick={(e) => setShowStatus(!showStatus)}
+            onChange={(e) => setShowStatus(!showStatus)}
           />
           <label>Show Status</label>
       </div>
@@ -71,12 +69,14 @@ const RackElevationView = (props) => {
 
     <div className="flex flex-col w-1/2 p-2 h-100 overflow-y-scroll">
       <table className="text-[12px]">
-      {Object.entries(selectedRack).map(([k,v])=>(
-        <tr className="border-b">
+      <tbody>
+      {Object.entries(selectedRack).map(([k,v],index)=>(
+        <tr key={index} className="border-b">
           <td className="text-left h-[25px] text-gray-500 p-1">{toProperCase(k)}</td>
           <td className="text-left h-[25px] text-blue-600 p-1">{v}</td>
         </tr>
       ))}
+      </tbody>
       </table>
 
       <div className="p-3 w-full">

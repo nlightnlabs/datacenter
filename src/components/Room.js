@@ -69,8 +69,6 @@ const Room = (props) => {
       const selected_rack_id = serverData.find(i=>i.id === selectedServer.id).rack_id
       const selected_rack = racks.find(i=>i.id ===selected_rack_id)
       setSelectedRack(selected_rack)
-      console.log(selectedServer)
-      console.log(selected_rack)
     }
   },[selectedServer])
 
