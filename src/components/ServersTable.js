@@ -16,18 +16,38 @@ const ServerDetails = (props) => {
 
     
     const getTableData = ()=>{
+      let fieldsToRemove = [
+        "height",
+        "width",
+        "depth",
+        "description",
+        "status_color",
+        "rack_model",
+        "row",
+        "column",
+        "rack_manufacturer",
+        "rack_height",
+        "rack_width",
+        "rack_depth",
+        "rack_description",
+        "rack_photo",
+        "grid_x",
+        "grid_z",
+        "x",
+        "y",
+        "z",
+      ]
 
-      let fieldList = []
         if(servers.length>0){
-          Object.keys(servers[0]).map((field,index)=>{
+          let filteredList = Object.keys(servers[0]).filter(item => !fieldsToRemove.includes(item));
+          let fieldList = []
+          filteredList.map((field,index)=>{
             fieldList.push({headerName: toProperCase(field.replaceAll("_"," ")), field: field, filter: true})
         })
           setFields(fieldList)
         }
 
-        setTableData(servers.sort((a, b) => {
-          return  b.id-a.id;
-        }));
+        setTableData(servers)
 
       }
       
@@ -41,6 +61,14 @@ const ServerDetails = (props) => {
       setShowRecordDetails(true)
       props.setSelectedServer(e.data)
     }
+
+
+    const gridOptions = {
+      autoSizeStrategy: {
+          type: 'fitCellContents',
+          defaultMinWidth: 50
+      },
+  }
   
   return (
       <div className="ag-theme-quartz animate__animated animate__fadeIn animate__duration-0.5s" style={{fontSize:"12px", height: "100%", width: "100%" }}>
@@ -48,6 +76,7 @@ const ServerDetails = (props) => {
           rowData={tableData} 
           columnDefs={fields} 
           onCellClicked={onCellClicked}
+          gridOptions = {gridOptions}
         />
     </div>
   )

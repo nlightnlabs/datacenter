@@ -17,14 +17,14 @@ const RackElevationView = (props) => {
   const getServers = (selectedRack, selectedServer) => {
     if (selectedRack != null && serverData.length > 0 && selectedServer != null) {
       const servers = serverData.filter(i => i.rack_id === selectedRack.id);
+      servers.sort((a, b) => b.U_position - a.U_position);
       setServers(servers);
     }
   };
 
   useEffect(()=>{
-    // console.log(setSelectedServer)
-    // props.setSelectedServer(selectedServer)
-  },[setSelectedServer])
+    props.setSelectedServer(selectedServer)
+  },[selectedServer])
 
   useEffect(() => {
     getServers(selectedRack, selectedServer);
@@ -33,31 +33,44 @@ const RackElevationView = (props) => {
 
 
   return (
-    <div className="overflow-y-scroll">
-      {selectedRack != null && 
-        <div className="flex h-[40px] justify-center items-center font-bold text-[18px] w-full mb-2 text-center bg-gray-100">Rack Details</div>
-      }
+    <div className="flex flex-col w-full h-100 overflow-hidden transition duration-500">
 
-    <div className="flex w-full h-[30px] pe-2 justify-end">
-      <button 
-        className="bg-yellow-500 text-[12px] text-white h-[30px] ps-2 pe-2 rounded cursor-pointer"
-        onClick = {(e)=>setShowFloatingPanel(true)}
-        >
+      <div className="flex font-bold text-[18px] w-full h-[40px] items-center justify-center mb-2 text-center bg-gray-100">Rack Details</div>
+
+      <div className="flex w-full h-[40px] pe-2 justify-end border-b pb-2">
+        <button 
+          className="text-yellow-500 border-2 border-yellow-500 text-[12px] h-[30px] ms-3 ps-2 pe-2 rounded cursor-pointer
+          hover:bg-yellow-500 hover:text-white transition duration-500
+          "
+          onClick = {(e)=>setShowFloatingPanel(true)}
+          >
             Modify
         </button>
 
         <button 
-            className="bg-red-600 text-[12px] text-white h-[30px] ms-3 ps-2 pe-2 rounded cursor-pointer"
+            className="text-red-600 border-2 border-red-600 text-[12px] h-[30px] ms-3 ps-2 pe-2 rounded cursor-pointer
+            hover:bg-red-600 hover:text-white transition duration-500
+            "
             onClick = {(e)=>setShowFloatingPanel(true)}
         >
             Decommission
         </button>
-    </div>
+
+        <button 
+            className="text-blue-600 border-2 border-blue-600 text-[12px] h-[30px] ms-3 ps-2 pe-2 rounded cursor-pointer
+            hover:bg-blue-600 hover:text-white transition duration-500
+            "
+            onClick = {(e)=>setShowFloatingPanel(true)}
+        >
+            Request New
+        </button>
+
+      </div>
 
 
-    <div className="flex justify-between">
+    <div className="flex justify-between overflow-y-scroll">
     
-    <div className="w-1/2 p-3">
+    <div className="w-1/2 p-3 ">
 
       <div className="flex p-1 text-[12px]">
           <input
@@ -76,18 +89,18 @@ const RackElevationView = (props) => {
         {servers.map((server, index) => (
           <div 
             key={index+1}
-            className="bg-gray-500 border-1 border-white flex justify-center items-center w-full text-[10px] text-white" // Added `w-full` to center and `mb-2` for spacing
+            className="bg-gray-500 border-1 border-white flex justify-center items-center w-full text-[12px] text-white cursor-pointer 
+              transition duration-500 hover:scale-110 hover:cursor-pointer hover:shadow-md" // Added `w-full` to center and `mb-2` for spacing
             style={{backgroundColor: showStatus ? server.status_color : "rgb(100,100,100)"}}
-            cursor="pointer"
-            onClick={() => setSelectedServer(server)}
+            onClick={()=>setSelectedServer(server)}
           >
-            {server.id} | {server.model} | {server.operating_system}
+           U{server.U_position}: {server.id} | {server.model} | {server.operating_system}
           </div>
         ))}
       </div>
     </div>
 
-    <div className="flex flex-col w-1/2 p-2 h-100 overflow-y-scroll">
+    <div className="flex flex-col w-1/2 p-2 h-100">
       <table className="text-[12px]">
       <tbody>
       {Object.entries(selectedRack).map(([k,v],index)=>(
@@ -108,7 +121,7 @@ const RackElevationView = (props) => {
     </div>
 
     {showFloatingPanel &&
-        <div className="absolute left-0 top-0 h-100 w-full bg-[rgba(0,0,0,0.5)] z-50">
+        <div className="absolute left-0 top-0 h-100 w-full bg-[rgba(0,0,0,0.75)] z-50">
             <FloatingPanel displayPanel={setShowFloatingPanel} headerColor="rgb(255,255,255)" headerTextColor="rgba(0,0,0,0)">
                 <div className="flex h-[150px] w-[300px] text-[24px] text-bold text-red-600 text-center justify-center items-center">This will trigger a workflow</div>
             </FloatingPanel>

@@ -4,6 +4,7 @@ import * as THREE from 'three'; // Import THREE for geometry
 import { OrbitControls, OrthographicCamera, Text } from "@react-three/drei"; // Import OrthographicCamera
 import serverData from './data_center_servers.json';
 import Slider from "./Slider";
+import { toProperCase } from "../functions/formatValue";
 
 const Server = ({ width, height, depth, x, y, z, color, label,showLabel, onClick, opacity, highlightStatus, showEdges }) => {
 
@@ -47,9 +48,10 @@ const Floor = ({ width, height, depth, x, y, z, color, label, onClick, opacity }
   );
 };
 
-const Scene = ({servers, setSelectedServer, opacity, highlightStatus, maxDimensions, showLabel, showEdges }) => {
+const Scene = ({servers, selectedServer, setSelectedServer, opacity, highlightStatus, maxDimensions, showLabel, showEdges }) => {
  
   return (
+
     <>
       {servers.map((server, index) => (
         <Server
@@ -61,7 +63,15 @@ const Scene = ({servers, setSelectedServer, opacity, highlightStatus, maxDimensi
           x={server.x}
           y={server.y}
           z={server.z}
-          color={highlightStatus? server.status_color : "gray"}
+          color={
+            highlightStatus && !selectedServer ? server.status_color
+            :
+            selectedServer && selectedServer.id ===server.id ? "blue"
+            :
+            selectedServer && selectedServer.id !==server.id ? "rgb(235,235,235)"
+            :
+            "gray"
+          }
           label={server.model}
           showLabel={showLabel}
           onClick={() => setSelectedServer(server)}
@@ -87,7 +97,11 @@ const CameraController = ({ cameraX, cameraY, cameraZ, fov}) => {
   return null; // No need to render anything
 };
 
-const View = ({ setSelectedServer, selectedRoom }) => {
+const View = (props) => {
+
+  const selectedServer = props.selectedServer
+  const selectedRoom = props.selectedRoom
+  const statuses = props.statuses
 
   const [servers, setServers] = useState([])
 
@@ -121,6 +135,28 @@ const View = ({ setSelectedServer, selectedRoom }) => {
     getServers()
   },[selectedRoom])
 
+  let fieldsToRemove = [
+    "height",
+    "width",
+    "depth",
+    "description",
+    "status_color",
+    "rack_model",
+    "row",
+    "column",
+    "rack_manufacturer",
+    "rack_height",
+    "rack_width",
+    "rack_depth",
+    "rack_description",
+    "rack_photo",
+    "grid_x",
+    "grid_z",
+    "x",
+    "y",
+    "z",
+  ]
+
 
 
   const maxDimensions = {x: maxX, y: maxY, z: maxZ}
@@ -149,6 +185,12 @@ const View = ({ setSelectedServer, selectedRoom }) => {
 
   const [showLabel, setShowLabel] = useState(false)
 
+  const [controlType, setControlType] = useState(false)
+
+  useEffect(()=>{
+    console.log()
+  },[])
+  
   const updateView = (value) => {
     setViewType(value);
     setEnableRotate(false); // Disable rotation for orthographic views
@@ -186,17 +228,25 @@ const View = ({ setSelectedServer, selectedRoom }) => {
     setFov(25); // Reset FOV
   };
 
+
+  const clearSelection = ()=>{
+    props.setSelectedServer(null)
+    props.setSelectedRack(null)
+  }
+
+
+
   return (
     <div className="flex flex-col w-full overflow-hidden">
       <div className="flex justify-end text-[12px] align-items-center w-full border-b-[1px] border-t-[1px] p-2 bg-gray-100 flex-wrap">
-        <button
+        {/* <button
           className="p-1 border-2 rounded w-[50px] me-2 hover:bg-[rgb(0,150,225)] hover:text-white hover:border-[rgb(0,150,225)]"
           onClick={(e)=>show3DView("3D")}
         >
           3D
-        </button>
+        </button> */}
        
-        <button
+        {/* <button
           className="p-1 border-2 rounded w-[50px] me-2 hover:bg-[rgb(0,150,225)] hover:text-white hover:border-[rgb(0,150,225)]"
           onClick={(e)=>updateView("top")}
         >
@@ -229,9 +279,30 @@ const View = ({ setSelectedServer, selectedRoom }) => {
           onClick={(e)=>updateView("back")}
         >
           Back
-        </button>
+        </button> */}
 
-        <div className="me-4">
+        {/* <div 
+          className="flex h-[30px] w-[40px] border-2 border-gray-200 rounded items-center justify-center"
+          onClick = {(e)=>setControlType("pan")}
+          >
+            Pan
+        </div>
+
+        <div 
+          className="flex h-[30px] w-[40px] border-2 border-gray-200 rounded items-center justify-center"
+          onClick = {(e)=>setControlType("rotate")}
+          >
+            Rot
+        </div>
+
+        <div 
+          className="flex h-[30px] w-[40px] border-2 border-gray-200 rounded items-center justify-center"
+          onClick = {(e)=>setControlType("zoom")}
+          >
+            Zm
+        </div> */}
+
+        {viewType !=="3D" && <div className="me-4">
           <Slider 
             label="Zoom"
             units = ""
@@ -242,7 +313,7 @@ const View = ({ setSelectedServer, selectedRoom }) => {
             width = "100px"
             disabled={viewType ==="3D"? true: false}
           />
-        </div>
+        </div>}
 
 
         <div className="me-4">
@@ -289,11 +360,20 @@ const View = ({ setSelectedServer, selectedRoom }) => {
           />
           <label>Show Edges</label>
         </div>
+
+        <div className="flex items-center ps-2 pe-2 justify-center h-[40px] border-2 rounded border-gray-300 ms-2
+        hover:bg-blue-600 hover:text-white transition duration-500 cursor-pointer
+        "
+        onClick = {(e)=>clearSelection(null)}
+        >
+          Clear Selection
+        </div>
       </div>
 
       
 
-      <div className="flex flex-col w-full overflow-hidden h-[500px]">
+      <div className="relative flex flex-col w-full overflow-hidden h-[500px]">
+
         <Canvas>
           {/* Ambient light for general lighting */}
           <ambientLight intensity={0.5} />
@@ -334,14 +414,50 @@ const View = ({ setSelectedServer, selectedRoom }) => {
           {servers.length>0 && 
           <Scene 
             servers = {servers}
-            setSelectedServer={setSelectedServer}
+            selectedServer = {selectedServer}
+            setSelectedServer={props.setSelectedServer}
             opacity={opacity}
             highlightStatus={highlightStatus}
             maxDimensions={maxDimensions}
             showLabel={showLabel}
             showEdges={showEdges}
           />}
-        </Canvas>   
+        </Canvas>
+
+        {highlightStatus && statuses.length>0 &&
+          <div className="absolute right-0 fade-in overflow-y-scroll bg-white shadow-md p-2 text-[12px] rounded-md border-2 border-gray-200 m-2
+          transition duration-500">
+            <div className="flex w-full h-[25px] text-[12px] items-center">Status</div>
+            <table className="text-[12px]">
+              <tbody>
+              {statuses.map((item,index)=>(
+                <tr key={index}>
+                  <td className={`text-left h-[25px] p-1 w-1/4`} style={{backgroundColor: item.color}}></td>
+                  <td className="text-left h-[25px] text-gray-500 p-1">{item.status}</td>
+                </tr>
+              ))}
+              </tbody>
+          </table>
+          </div>   
+        } 
+        
+        {selectedServer &&
+          <div className="absolute fade-in h-[375px] overflow-y-scroll bg-white shadow-md p-2 text-[12px] rounded-md border-2 border-gray-200 m-2
+          transition duration-500">
+            <div className="flex w-full h-[25px] text-[14px] border-b items-center">Selected Server</div>
+            <table className="text-[12px]">
+              <tbody>
+              {Object.entries(selectedServer).map(([k,v],index)=>(
+                !fieldsToRemove.includes(k) && 
+                (<tr key={index} className="border-b">
+                  <td className="text-left h-[25px] text-gray-500 p-1 w-1/4">{toProperCase(k.replace("_"," "))}</td>
+                  <td className="text-left h-[25px] text-black font-bold p-1">{v}</td>
+                </tr>)
+              ))}
+              </tbody>
+          </table>
+          </div>   
+        } 
       </div>
 
     </div>

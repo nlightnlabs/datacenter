@@ -17,6 +17,8 @@ const Room = (props) => {
   const [selectedRoom, setSelectedRoom] = useState("West Room Center")
   const [rooms, setRooms] = useState([])
 
+
+  // Get Rooms
   const getRooms = ()=>{
     let rooms = new Set()
     serverData.map(item =>{
@@ -26,9 +28,10 @@ const Room = (props) => {
     setRooms(rooms)
   }
 
+
+  // Get Racks
   const [racks, setRacks] = useState([])
   const getRacks = ()=>{
-
     let rack_list = new Set()
     serverData.map(item =>{
       rack_list.add(item.rack_id)
@@ -55,6 +58,28 @@ const Room = (props) => {
     setRacks(racks)
   }
 
+  // Get Statuses
+  const [statuses, setStatuses] = useState([])
+  const getStatuses = ()=>{
+
+    let status_list = new Set()
+    serverData.map(item =>{
+      status_list.add(item.status)
+    })
+    status_list = Array.from(status_list)
+
+
+    let statuses = []
+    status_list.map((item)=>{
+      let status = {
+        status: serverData.filter(i=>i.status ===item)[0].status,
+        color: serverData.filter(i=>i.status ===item)[0].status_color,
+      }
+      statuses = [...statuses,status]
+    })
+    setStatuses(statuses)
+  }
+
   const handleRackClick = (rackId) => {
     setSelectedRack(rackId);
   };
@@ -62,11 +87,10 @@ const Room = (props) => {
   useEffect(()=>{
     getRooms()
     getRacks()
+    getStatuses()
   },[])
 
   useEffect(()=>{
-
-    console.log(selectedServer)
     
     if(selectedServer !=null){
       const selected_rack_id = serverData.find(i=>i.id === selectedServer.id).rack_id
@@ -81,10 +105,10 @@ const Room = (props) => {
 
 
   return (
-    <div className="flex flex-col w-full h-100 overflow-scroll">
+    <div className="flex flex-col w-full h-100 overflow-scroll pb-[300px]">
       
-    <div className="flex text-[24px] w-1/2">
-      <div className="text-gray-400">Room:</div> 
+    <div className="flex text-[24px] w-1/2 mb-2 transition duration-500">
+      <div className="text-gray-400 ms-[10%]">Room:</div> 
       <div className="ms-3 font-bold">
         <select className="w-[300px]" onChange={handleRoomChange} value={selectedRoom}>
           {rooms.map((item,index)=>(
@@ -94,12 +118,12 @@ const Room = (props) => {
       </div>
     </div>
  
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full transition duration-500">
 
-        <div className="flex w-full justify-center flex-wrap">
+        <div className="flex w-full mb-3 justify-center transition duration-500 flex-wrap">
 
           <div 
-            className={`"flex flex-col w-full ${selectedRack ? 'md:w-[60%]': 'md:w-full'} min-w-[500px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500 mb-3"`}
+            className={`"flex flex-col w-[90%] ${selectedRack ? 'w-[60%]' : 'md:w-[90%]'} min-w-[500px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500 mb-3"`}
           >
 
             <div className="flex justify-end flex-wrap">
@@ -120,17 +144,19 @@ const Room = (props) => {
 
 
             {view ==="plan" &&
-              <div className="flex w-full h-100 overflow-hidden" style={{transition: "0.5s"}} > 
+              <div className="flex w-full h-100 overflow-hidden transition duration-500" style={{transition: "0.5s"}} > 
                 <PlanView onRackClick={(rackId)=>handleRackClick(rackId)} />
               </div>
             }
 
             {view ==="3D" && 
-              <div className="flex w-full h-100 overflow-hidden" style={{transition: "0.5s"}} >
+              <div className="flex w-full h-100 overflow-hidden transition duration-500" style={{transition: "0.5s"}} >
                 <ThreeDView
                     selectedRoom = {selectedRoom}
                     selectedServer = {selectedServer}
                     setSelectedServer = {setSelectedServer}
+                    setSelectedRack = {setSelectedRack}
+                    statuses = {statuses}
                 />
               </div>
             }
@@ -139,7 +165,7 @@ const Room = (props) => {
 
           {selectedRack &&
             <div 
-              className="flex flex-col w-full md:w-[30%] min-w-[300px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md md:ms-3 mb-3"
+              className="flex flex-col w-[30%] md:w-[30%] min-w-[300px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md md:ms-3 mb-3 transition duration-500"
               style={{transition: "0.5s"}} 
             >  
                 <RackElevationView 
@@ -154,7 +180,9 @@ const Room = (props) => {
         
         <div className="flex w-full justify-center flex-wrap">
 
-          <div className={`"flex flex-col w-full ${selectedServer && 'md:w-[60%]'} min-w-[500px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500"`} >
+          <div 
+            className={`"flex flex-col w-[90%] ${selectedServer ? 'w-[60%]' : 'md:w-[90%]'} min-w-[500px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500 mb-3"`}
+          >
               <ServersTable
                 setSelectedServer = {setSelectedServer}
               />
@@ -166,7 +194,6 @@ const Room = (props) => {
               <ServerDetails selectedServer={selectedServer}/>
             </div>
           }
-
         </div>
     </div>
   </div>

@@ -21,7 +21,7 @@ const Home = () => {
   }
 
   return (
-    <div className="w-full p-[20px] h-[5000px] fade-in overflow-hidden" style={pageStyle}>
+    <div className="w-full p-[20px] h-100 fade-in overflow-hidden" style={pageStyle}>
         <Room />
     </div>
   )
