@@ -283,8 +283,8 @@ const View = (props) => {
             units = ""
             min = {0}
             max = {20}
-            value={zoom}
-            updateParent={setZoom}
+            value={fov}
+            updateParent={setFov}
             width = "100px"
             disabled={viewType ==="3D"? true: false}
           />
@@ -293,7 +293,7 @@ const View = (props) => {
 
         <div className="me-4">
           <Slider 
-            label="Perspective"
+            label="Zoom"
             units = ""
             min = {0}
             max = {100}
@@ -351,7 +351,7 @@ const View = (props) => {
 
         <Canvas>
           {/* Ambient light for general lighting */}
-          <ambientLight intensity={0.5} />
+          <ambientLight intensity={1} />
           {/* Directional light to cast shadows */}
           <directionalLight position={[-75, 200, 300]} intensity={1} />
 
