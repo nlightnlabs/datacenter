@@ -1,0 +1,22 @@
+[
+    {
+        "status":"Offline",
+        "percent_of_total":"21.38%"
+    },
+    {
+        "status":"Failed",
+        "percent_of_total":"20.26%"
+    },
+    {
+        "status":"Online",
+        "percent_of_total":"19.66%"
+    },
+    {
+        "status":"Rebooting",
+        "percent_of_total":"19.48%"
+    },
+    {
+        "status":"Terminating",
+        "percent_of_total":"19.22%"
+    }
+]

@@ -11,6 +11,7 @@ import * as nlightnlApi from './apis/nlightn'
 import Home from "./Home";
 import Header from "./components/Header";
 import Menu from "./components/Menu.js"
+import Insights from './components/Insights.js';
 
 
 // Set application details:
@@ -37,6 +38,7 @@ function App() {
   // Setup data
   const pageData = [
     { id: 1, section: 1, name: "Home", label: "Home", icon: "HomeIcon", component: <Home/>, showOnMenu: true},
+    { id: 2, section: 1, name: "Insights", label: "Insights", icon: "AnalysisIcon", component: <Insights/>, showOnMenu: true},
   ];
 
   const getPages = async ()=>{
@@ -79,11 +81,24 @@ function App() {
     <div className="flex-container overflow-hidden" style={{height: "100vh", width: "100vw"}}>
         
         <Header appName={appName} logo={logoFile}/>
+
+        <div className="flex ms-[100px] h-[40px] w-full items-center text-gray-500 transition duration-500">
+          <div 
+            className="flex me-2 p-1 cursor-pointer transition duration-500 hover:text-black 
+            hover:font-bold hover:border-2 border-gray-300 rounded"
+            onClick = {(e)=>dispatch(setCurrentPage("Home"))}
+          >Home</div>
+          <div 
+            className="flex me-2 p-1 cursor-pointer transition duration-500 hover:text-black 
+          hover:font-bold hover:border-2 border-gray-300 rounded"
+          onClick = {(e)=>dispatch(setCurrentPage("Insights"))}
+          >Analysis</div>
+        </div>
      
         <div className="d-flex w-100" style={{height:"100%"}}>
             <div className="d-flex w-100 justify-content-between" style={{height:"100%"}}>
-                {pages.length>0 && pageData.find(i=>i.name ===currentPage).component}
                 {/* {menuItems.length>0 && <Menu menuItems={menuItems} colorTheme={theme}/> } */}
+                {pages.length>0 && pageData.find(i=>i.name ===currentPage).component}
             </div>
         </div>
 

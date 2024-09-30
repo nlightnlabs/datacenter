@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import * as THREE from 'three'; // Import THREE for geometry
 import { OrbitControls, OrthographicCamera, Text } from "@react-three/drei"; // Import OrthographicCamera
-import serverData from './data_center_servers.json';
 import Slider from "./Slider";
 import { toProperCase } from "../functions/formatValue";
 
@@ -49,7 +48,7 @@ const Floor = ({ width, height, depth, x, y, z, color, label, onClick, opacity }
 };
 
 const Scene = ({servers, selectedServer, setSelectedServer, opacity, highlightStatus, maxDimensions, showLabel, showEdges }) => {
- 
+
   return (
 
     <>
@@ -66,7 +65,7 @@ const Scene = ({servers, selectedServer, setSelectedServer, opacity, highlightSt
           color={
             highlightStatus && !selectedServer ? server.status_color
             :
-            selectedServer && selectedServer.id ===server.id ? "blue"
+            selectedServer && selectedServer.id ===server.id ? "rgb(0,150,255)"
             :
             selectedServer && selectedServer.id !==server.id ? "rgb(235,235,235)"
             :
@@ -102,69 +101,13 @@ const View = (props) => {
   const selectedServer = props.selectedServer
   const selectedRoom = props.selectedRoom
   const statuses = props.statuses
-
-  const [servers, setServers] = useState([])
+  const servers = props.servers
 
   const [maxX, setMaxX] = useState(0)
   const [maxY, setMaxY] = useState(0)
   const [maxZ, setMaxZ] = useState(0)
+  const [maxDimensions, setMaxDimensions] = useState({x: 500, y:500, z:500})
 
-  const getServers = ()=>{
-    
-    if(selectedRoom !=null && selectedRoom !=""){
-      let servers = serverData.filter(i=>i.room_name === selectedRoom)
-      let maxX = Math.max(...servers.map((server) => server.x))
-      let maxY = Math.max(...servers.map((server) => server.y))
-      let maxZ = Math.max(...servers.map((server) => server.z))
-
-      setViewType("3D")
-      setEnableRotate(true)
-      setCameraX(maxX * 2);
-      setCameraY(maxY * 3.5);
-      setCameraZ(maxZ * 2.75);
-      setFov(25); // Reset FOV
-
-      setServers(servers)
-      setMaxX(maxX)
-      setMaxY(maxY)
-      setMaxZ(maxY)
-    }
-  }
-
-  useEffect(()=>{
-    getServers()
-  },[selectedRoom])
-
-  let fieldsToRemove = [
-    "height",
-    "width",
-    "depth",
-    "description",
-    "status_color",
-    "rack_model",
-    "row",
-    "column",
-    "rack_manufacturer",
-    "rack_height",
-    "rack_width",
-    "rack_depth",
-    "rack_description",
-    "rack_photo",
-    "grid_x",
-    "grid_z",
-    "x",
-    "y",
-    "z",
-  ]
-
-
-
-  const maxDimensions = {x: maxX, y: maxY, z: maxZ}
-
-  const [fov, setFov] = useState(25); // Default field of view (FOV)
-  const [cameraX, setCameraX] = useState(maxX * 2);
-  const [cameraY, setCameraY] = useState(maxY * 3);
-  const [cameraZ, setCameraZ] = useState(maxZ * 2.5);
   const [viewType, setViewType] = useState("3D")
   const [highlightStatus, setHighlightStatus] = useState(true); 
   const [opacity, setOpacity] = useState(0.6)
@@ -177,19 +120,53 @@ const View = (props) => {
   const [enablePan, setEnablePan] = useState(true)
   const [panSpeed, setPanSpeed] = useState(0.5)
 
+
+  // for 3D View
+  const [fov, setFov] = useState(25); // Default field of view (FOV)
+  const [cameraX, setCameraX] = useState(500);
+  const [cameraY, setCameraY] = useState(500);
+  const [cameraZ, setCameraZ] = useState(350);
+
+  const [targetX, setTargetX] = useState(0);
+  const [targetY, setTargetY] = useState(0);
+  const [targetZ, setTargetZ] = useState(0);
+
+  // For 2D views:
   const [zoom, setZoom] = useState(1)
-  const [position, setPosition] = useState([maxX/2, maxY*2, 0])
-  const [near, setNear] = useState(0.1)
-  const [far, setFar] = useState(10000)
+  const [position, setPosition] = useState([maxX/2, maxY/2, maxZ/2])
+  const [near, setNear] = useState(1000)
+  const [far, setFar] = useState(1000)
   const [up, setUp] = useState([0, 0, -1])
 
   const [showLabel, setShowLabel] = useState(false)
-
   const [controlType, setControlType] = useState(false)
 
+  const setView = ()=>{
+  
+    if(servers.length>0){
+      let maxX = Math.max(...servers.map((server) => server.x))
+      let maxY = Math.max(...servers.map((server) => server.y))
+      let maxZ = Math.max(...servers.map((server) => server.z))
+
+      let maxDimensions = {x: maxX, y: maxY, z: maxZ}
+
+      setMaxX(maxX)
+      setMaxX(maxY)
+      setMaxX(maxZ)
+
+      setCameraX(maxX*2.5)
+      setCameraY(maxY*5)
+      setCameraZ(maxZ*2.5)
+
+      setTargetX(maxX/2)
+      setTargetY(maxY/100)
+      setTargetZ(maxZ/2)
+    }
+  }
   useEffect(()=>{
-    console.log()
-  },[])
+    setView()
+  },[props])
+ 
   
   const updateView = (value) => {
     setViewType(value);
@@ -217,7 +194,7 @@ const View = (props) => {
       setUp([0, 1, 0]);  // Y-axis as the "up" direction
     }
   };
-  
+
 
   const show3DView = () => {
     setViewType("3D")
@@ -233,8 +210,6 @@ const View = (props) => {
     props.setSelectedServer(null)
     props.setSelectedRack(null)
   }
-
-
 
   return (
     <div className="flex flex-col w-full overflow-hidden">
@@ -382,7 +357,7 @@ const View = (props) => {
 
           {/* OrbitControls for interacting with the view */}
           <OrbitControls
-            target={[maxX / 2, maxY / 2, maxZ / 2]}
+            target={[targetX, targetY, targetZ]}
             enableZoom={enableZoom}
             zoomSpeed={zoomSpeed}
             enableRotate={viewType === "3D"}  // Enable rotation only for 3D view
@@ -402,11 +377,11 @@ const View = (props) => {
               up={up} // Set up vector for correct orientation
             />
           ) : (
-            <CameraController 
+            <CameraController
               cameraX={cameraX} 
               cameraY={cameraY} 
               cameraZ={cameraZ} 
-              fov={fov} 
+              fov={fov}
             />
           )}
 
@@ -440,24 +415,7 @@ const View = (props) => {
           </table>
           </div>   
         } 
-        
-        {selectedServer &&
-          <div className="absolute fade-in h-[375px] overflow-y-scroll bg-white shadow-md p-2 text-[12px] rounded-md border-2 border-gray-200 m-2
-          transition duration-500">
-            <div className="flex w-full h-[25px] text-[14px] border-b items-center">Selected Server</div>
-            <table className="text-[12px]">
-              <tbody>
-              {Object.entries(selectedServer).map(([k,v],index)=>(
-                !fieldsToRemove.includes(k) && 
-                (<tr key={index} className="border-b">
-                  <td className="text-left h-[25px] text-gray-500 p-1 w-1/4">{toProperCase(k.replace("_"," "))}</td>
-                  <td className="text-left h-[25px] text-black font-bold p-1">{v}</td>
-                </tr>)
-              ))}
-              </tbody>
-          </table>
-          </div>   
-        } 
+      
       </div>
 
     </div>

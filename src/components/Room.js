@@ -10,16 +10,20 @@ import ServerDetails from "./ServerDetails";
 // Main Application Component
 const Room = (props) => {
 
+  const [servers, setServers] = useState([])
+  const [racks, setRacks] = useState([])
+  const [rooms, setRooms] = useState([])
+
   const [selectedRack, setSelectedRack] = useState(null)
   const [selectedServer, setSelectedServer] = useState(null)
-  const [view, setView] = useState("3D")
-
   const [selectedRoom, setSelectedRoom] = useState("West Room Center")
-  const [rooms, setRooms] = useState([])
+
+  const [view, setView] = useState("3D")
 
 
   // Get Rooms
   const getRooms = ()=>{
+
     let rooms = new Set()
     serverData.map(item =>{
       rooms.add(item.room_name)
@@ -28,13 +32,17 @@ const Room = (props) => {
     setRooms(rooms)
   }
 
+  const getServers = ()=>{
 
-  // Get Racks
-  const [racks, setRacks] = useState([])
-  const getRacks = ()=>{
-    let rack_list = new Set()
-    serverData.map(item =>{
-      rack_list.add(item.rack_id)
+    if(selectedRoom){
+      let servers = serverData.filter(i=>i.room_name === selectedRoom)
+      setServers(servers)
+    
+      let rack_list = new Set()
+    servers.map(item =>{
+      if(item.room_name === selectedRoom){
+        rack_list.add(item.rack_id)
+      }
     })
     rack_list = Array.from(rack_list)
 
@@ -56,6 +64,13 @@ const Room = (props) => {
       racks = [...racks,rack]
     })
     setRacks(racks)
+    }
+  }
+
+  // Get Racks
+  
+  const getRacks = ()=>{
+    
   }
 
   // Get Statuses
@@ -86,14 +101,14 @@ const Room = (props) => {
 
   useEffect(()=>{
     getRooms()
-    getRacks()
     getStatuses()
-  },[])
+    getServers()
+  },[selectedRoom])
 
   useEffect(()=>{
-    
-    if(selectedServer !=null){
-      const selected_rack_id = serverData.find(i=>i.id === selectedServer.id).rack_id
+ 
+    if(selectedServer != null){
+      const selected_rack_id = servers.find(i=>i.id === selectedServer.id).rack_id
       const selected_rack = racks.find(i=>i.id ===selected_rack_id)
       setSelectedRack(selected_rack)
     }
@@ -123,7 +138,7 @@ const Room = (props) => {
         <div className="flex w-full mb-3 justify-center transition duration-500 flex-wrap">
 
           <div 
-            className={`"flex flex-col w-[90%] ${selectedRack ? 'w-[60%]' : 'md:w-[90%]'} min-w-[500px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500 mb-3"`}
+            className={`"flex flex-col w-[90%] ${selectedRack && 'md:w-[60%]'} min-w-[500px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500 mb-3"`}
           >
 
             <div className="flex justify-end flex-wrap">
@@ -153,6 +168,7 @@ const Room = (props) => {
               <div className="flex w-full h-100 overflow-hidden transition duration-500" style={{transition: "0.5s"}} >
                 <ThreeDView
                     selectedRoom = {selectedRoom}
+                    servers = {servers}
                     selectedServer = {selectedServer}
                     setSelectedServer = {setSelectedServer}
                     setSelectedRack = {setSelectedRack}
@@ -165,10 +181,11 @@ const Room = (props) => {
 
           {selectedRack &&
             <div 
-              className="flex flex-col w-[30%] md:w-[30%] min-w-[300px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md md:ms-3 mb-3 transition duration-500"
+              className="flex flex-col w-[30%] h-[500px] md:w-[30%] min-w-[300px] border-[1px] rounded-md border-gray-200 shadow-md md:ms-3 mb-3 transition duration-500"
               style={{transition: "0.5s"}} 
             >  
                 <RackElevationView 
+                  servers = {servers}
                   selectedRoom = {selectedRoom}
                   selectedRack={selectedRack} 
                   selectedServer = {selectedServer}
@@ -181,9 +198,10 @@ const Room = (props) => {
         <div className="flex w-full justify-center flex-wrap">
 
           <div 
-            className={`"flex flex-col w-[90%] ${selectedServer ? 'w-[60%]' : 'md:w-[90%]'} min-w-[500px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500 mb-3"`}
+            className={`"flex flex-col w-[90%] ${selectedServer && 'md:w-[60%]'} min-w-[500px] h-[500px] border-[1px] rounded-md border-gray-200 shadow-md transition duration-500 mb-3"`}
           >
               <ServersTable
+                servers = {servers}
                 setSelectedServer = {setSelectedServer}
               />
           </div>

@@ -6,19 +6,20 @@ import FloatingPanel from "./FloatingPanel";
 // Rack Elevation View Functional Component
 const RackElevationView = (props) => {
 
-  const [servers, setServers] = useState([]);
-  const selectedRack= props.selectedRack
+  const [servers, setServers] = useState(props.servers);
+  const [rackServers, setRackServers] = useState([])
+  const selectedRack = props.selectedRack
   const [selectedServer, setSelectedServer] = useState(props.selectedServer);
 
   const [showStatus, setShowStatus] = useState(true)
   const [showFloatingPanel, setShowFloatingPanel] = useState(false)
 
 
-  const getServers = (selectedRack, selectedServer) => {
-    if (selectedRack != null && serverData.length > 0 && selectedServer != null) {
-      const servers = serverData.filter(i => i.rack_id === selectedRack.id);
-      servers.sort((a, b) => b.U_position - a.U_position);
-      setServers(servers);
+  const getServers = () => {
+    if (selectedRack != null && servers.length > 0) {
+      let rackServers = servers.filter(i => i.rack_id === selectedRack.id);
+      rackServers.sort((a, b) => b.U_position - a.U_position);
+      setRackServers(rackServers);
     }
   };
 
@@ -27,9 +28,8 @@ const RackElevationView = (props) => {
   },[selectedServer])
 
   useEffect(() => {
-    getServers(selectedRack, selectedServer);
+    getServers();
   }, [props]);
-
 
 
   return (
@@ -86,7 +86,7 @@ const RackElevationView = (props) => {
         className="flex flex-col justify-center items-center mx-auto border-[10px] border-gray-800"
         style={{width: selectedRack.rack_width, height: selectedRack.rack_height}}
       >
-        {servers.map((server, index) => (
+        {rackServers.map((server, index) => (
           <div 
             key={index+1}
             className="bg-gray-500 border-1 border-white flex justify-center items-center w-full text-[12px] text-white cursor-pointer 

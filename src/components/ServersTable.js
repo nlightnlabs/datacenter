@@ -9,6 +9,8 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied
 
 const ServerDetails = (props) => {
 
+    const servers = props.servers
+
     const [tableData, setTableData] = useState([]);
     const [fields, setFields] = useState([])
     const [recordId, setSelectedRecordId] = useState(0)
@@ -53,15 +55,13 @@ const ServerDetails = (props) => {
       
   useEffect(()=>{
     getTableData()
-  },[])
-
+  },[props])
 
     const onCellClicked = (e) => {
       setSelectedRecordId(e.data.id)
       setShowRecordDetails(true)
       props.setSelectedServer(e.data)
     }
-
 
     const gridOptions = {
       autoSizeStrategy: {

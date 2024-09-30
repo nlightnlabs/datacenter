@@ -30,7 +30,6 @@ const PanView = (props) => {
     verticalGrids = Array.from(verticalGrids)
     setHorizontalGrids(horizontalGrids)
     setVerticalGrids(verticalGrids)
-    console.log("vericalGrids",verticalGrids)
     
     setGridContainerWidth((verticalGrids.length - 1)*verticalGridSpacing)
     setGridContainerHeight((horizontalGrids.length - 1)*horizontalGridSpacing)
