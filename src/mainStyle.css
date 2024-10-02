@@ -52,3 +52,56 @@ code {
   font-family: Arial;
 }
 
+.darkMode-bg {
+  background-color: rgb(50,50,50);
+}
+
+.lightMode-bg {
+  background-color: white;
+}
+
+.darkMode-text {
+  color: rgb(200,200,200)
+}
+
+.lightMode-text {
+  color: gray
+}
+
+.darkMode-border {
+  border: 1px solid rgb(50,50,50);
+}
+
+.lightMode-border {
+  border: 1px solid rgb(235,235,235);
+}
+
+.darkMode-button {
+  display: flex;
+  color: rgb(200,200,200);
+  cursor: pointer; 
+  font-size: 14px;
+  padding: 10px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.darkMode-button:hover {
+  background-color: rgb(50,50,50);
+}
+
+.lightMode-button {
+  display: flex;
+  color: gray;
+  cursor: pointer; 
+  font-size: 14px;
+  padding: 10px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.lightMode-button:hover {
+  background-color: rgb(235,235,235);
+}

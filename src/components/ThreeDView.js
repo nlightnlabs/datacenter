@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import { Canvas, useThree } from "@react-three/fiber";
 import * as THREE from 'three'; // Import THREE for geometry
 import { OrbitControls, OrthographicCamera, Text } from "@react-three/drei"; // Import OrthographicCamera
@@ -6,6 +7,8 @@ import Slider from "./Slider";
 import { toProperCase } from "../functions/formatValue";
 
 const Server = ({ width, height, depth, x, y, z, color, label,showLabel, onClick, opacity, highlightStatus, showEdges }) => {
+
+  const darkMode = useSelector(state => state.environment.darkMode);
 
   return (
     <>
@@ -97,6 +100,8 @@ const CameraController = ({ cameraX, cameraY, cameraZ, fov}) => {
 };
 
 const View = (props) => {
+
+  const darkMode = useSelector(state => state.environment.darkMode);
 
   const selectedServer = props.selectedServer
   const selectedRoom = props.selectedRoom
@@ -213,70 +218,8 @@ const View = (props) => {
 
   return (
     <div className="flex flex-col w-full overflow-hidden">
-      <div className="flex justify-end text-[12px] align-items-center w-full border-b-[1px] border-t-[1px] p-2 bg-gray-100 flex-wrap">
-        {/* <button
-          className="p-1 border-2 rounded w-[50px] me-2 hover:bg-[rgb(0,150,225)] hover:text-white hover:border-[rgb(0,150,225)]"
-          onClick={(e)=>show3DView("3D")}
-        >
-          3D
-        </button> */}
-       
-        {/* <button
-          className="p-1 border-2 rounded w-[50px] me-2 hover:bg-[rgb(0,150,225)] hover:text-white hover:border-[rgb(0,150,225)]"
-          onClick={(e)=>updateView("top")}
-        >
-          Top
-        </button>
-
-        <button
-          className="p-1 border-2 rounded w-[50px] me-2 hover:bg-[rgb(0,150,225)] hover:text-white hover:border-[rgb(0,150,225)]"
-          onClick={(e)=>updateView("front")}
-        >
-          Front
-        </button>
-
-        <button
-          className="p-1 border-2 rounded w-[50px] me-2 hover:bg-[rgb(0,150,225)] hover:text-white hover:border-[rgb(0,150,225)]"
-          onClick={(e)=>updateView("left")}
-        >
-          Left
-        </button>
-
-        <button
-          className="p-1 border-2 rounded w-[50px] me-2 hover:bg-[rgb(0,150,225)] hover:text-white hover:border-[rgb(0,150,225)]"
-          onClick={(e)=>updateView("right")}
-        >
-          Right
-        </button>
-
-        <button
-          className="p-1 border-2 rounded w-[50px] me-2 hover:bg-[rgb(0,150,225)] hover:text-white hover:border-[rgb(0,150,225)]"
-          onClick={(e)=>updateView("back")}
-        >
-          Back
-        </button> */}
-
-        {/* <div 
-          className="flex h-[30px] w-[40px] border-2 border-gray-200 rounded items-center justify-center"
-          onClick = {(e)=>setControlType("pan")}
-          >
-            Pan
-        </div>
-
-        <div 
-          className="flex h-[30px] w-[40px] border-2 border-gray-200 rounded items-center justify-center"
-          onClick = {(e)=>setControlType("rotate")}
-          >
-            Rot
-        </div>
-
-        <div 
-          className="flex h-[30px] w-[40px] border-2 border-gray-200 rounded items-center justify-center"
-          onClick = {(e)=>setControlType("zoom")}
-          >
-            Zm
-        </div> */}
-
+      <div className={`flex justify-end text-[12px] align-items-center w-full p-2 flex-wrap ${darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"}`}>
+    
         {viewType !=="3D" && <div className="me-4">
           <Slider 
             label="Zoom"
@@ -287,6 +230,7 @@ const View = (props) => {
             updateParent={setFov}
             width = "100px"
             disabled={viewType ==="3D"? true: false}
+            fontColor = {darkMode? "darkMode-text" : "lightMode-text"}
           />
         </div>}
 
@@ -301,6 +245,7 @@ const View = (props) => {
             updateParent={setFov}
             width = {"100px"}
             disabled={viewType==="3D"? false: true}
+            fontColor = {darkMode? "darkMode-text" : "lightMode-text"}
           />
         </div>
 
@@ -313,10 +258,11 @@ const View = (props) => {
             value={opacity*100}
             updateParent={(val)=>setOpacity(val/100)}
             width = "100px"
+            fontColor = {darkMode? "darkMode-text" : "lightMode-text"}
           />
         </div>
 
-        <div className="flex p-1">
+        <div className={`flex p-1 ${darkMode? "darkMode-text" : "lightMode-text"}`}>
           <input
             type="checkbox"
             className="me-1"
@@ -326,7 +272,7 @@ const View = (props) => {
           <label>Show Status</label>
         </div>
 
-        <div className="flex p-1">
+        <div className={`flex p-1 ${darkMode? "darkMode-text" : "lightMode-text"}`}>
           <input
             type="checkbox"
             className="me-1"
@@ -336,12 +282,10 @@ const View = (props) => {
           <label>Show Edges</label>
         </div>
 
-        <div className="flex items-center ps-2 pe-2 justify-center h-[40px] border-2 rounded border-gray-300 ms-2
-        hover:bg-blue-600 hover:text-white transition duration-500 cursor-pointer
-        "
+        <div className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
         onClick = {(e)=>clearSelection(null)}
         >
-          Clear Selection
+          Clear
         </div>
       </div>
 
@@ -400,15 +344,16 @@ const View = (props) => {
         </Canvas>
 
         {highlightStatus && statuses.length>0 &&
-          <div className="absolute right-0 fade-in overflow-y-scroll bg-white shadow-md p-2 text-[12px] rounded-md border-2 border-gray-200 m-2
-          transition duration-500">
+          <div className={`absolute right-0 fade-in overflow-y-scroll shadow-md p-2 text-[12px] rounded-md m-2
+            ${darkMode ? "darkMode-bg" : "lightMode-bg"} ${darkMode ? "darkMode-border" : "lightMode-border"} ${darkMode ? "darkMode-text" : "lightMode-text"} 
+          transition duration-500`}>
             <div className="flex w-full h-[25px] text-[12px] items-center">Status</div>
             <table className="text-[12px]">
               <tbody>
               {statuses.map((item,index)=>(
                 <tr key={index}>
                   <td className={`text-left h-[25px] p-1 w-1/4`} style={{backgroundColor: item.color}}></td>
-                  <td className="text-left h-[25px] text-gray-500 p-1">{item.status}</td>
+                  <td className={`text-left h-[25px] ${darkMode ? "darkMode-text" : "lightMode-text"}  p-1`}>{item.status}</td>
                 </tr>
               ))}
               </tbody>

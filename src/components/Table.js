@@ -1,8 +1,14 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import "bootstrap/dist/css/bootstrap.min.css"
 import { AgGridReact } from 'ag-grid-react'; // React Grid Logic
-import "ag-grid-community/styles/ag-grid.css"; // Core CSS
-import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
+// import "ag-grid-community/styles/ag-grid.css"; // Core CSS
+// import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
+// import "ag-grid-community/styles/ag-theme-quartz-dark.css"; // Theme
+
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+import 'ag-grid-community/styles/ag-theme-alpine-dark.css';
+
 import {toProperCase} from '../functions/formatValue.js'
 import { UTCToLocalTime } from '../functions/time.js';
 import * as nlightnApi from "../apis/nlightn.js"
@@ -16,6 +22,7 @@ const Table = (props) => {
     const sortingOrder = props.sortingOrder || []
     const selectRows = props.selectRows
     const onCellClicked = props.onCellClicked
+    const darkMode = props.darkMode
 
     const [tableData, setTableData] = useState([]);
     const [fields, setFields] = useState([])
@@ -32,6 +39,10 @@ const Table = (props) => {
         headerCheckboxSelection: true,
         resize: false
     }
+
+    useEffect(()=>{
+      console.log(darkMode)
+    },[props])
 
       let fieldList = [selectField]
         if(data.length>0){
@@ -102,10 +113,11 @@ const Table = (props) => {
   return (
     <div className="flex-container w-100">
         <div
-            className="ag-theme-quartz" 
+            className={`ag-theme-alpine${darkMode ? '-dark' : ''}`}
             style={{ height: 600 }}
         >
-        {tableData && <AgGridReact
+        {tableData && 
+        <AgGridReact
             rowData={tableData}
             columnDefs={fields}
             sortingOrder={sortingOrder ? sortingOrder : null}

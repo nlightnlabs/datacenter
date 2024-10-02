@@ -5,7 +5,7 @@ import { clearStorage } from './redux/slices/navSlice';
 
 import { setUser, setUserLoggedIn } from './redux/slices/authSlice';
 import { setCurrentPage, setPageList, setMenuItems } from './redux/slices/navSlice';
-import { setAppName, setDbName, setFileStorageBucket, setLogoFile, setTheme} from './redux/slices/envSlice';
+import { setAppName, setDbName, setFileStorageBucket, setLogoFile, setTheme, setDarkMode} from './redux/slices/envSlice';
 import * as nlightnlApi from './apis/nlightn'
 
 import Home from "./Home";
@@ -23,6 +23,7 @@ export const theme = "nlightn labs"
  
 function App() {
 
+
   const dispatch = useDispatch();
   // const navigateTo = useNavigate()
 
@@ -31,6 +32,7 @@ function App() {
   const userLoggedIn = useSelector(state => state.authentication.userLoggedIn);
   const currentPage = useSelector(state => state.navigation.currentPage);
   const menuItems = useSelector(state => state.navigation.menuItems);
+  const darkMode = useSelector(state => state.environment.darkMode);
   
   // local states
   const [pages, setPages] = useState([])
@@ -71,28 +73,30 @@ function App() {
     dispatch(setDbName(dbName))
     dispatch(setFileStorageBucket(fileStorageBucketName))
     dispatch(setLogoFile(logoFile))
-    dispatch(setTheme(theme))
+    dispatch(setTheme(darkMode))
+    dispatch(setDarkMode(darkMode))
+
 
     getPages()
     // getUsers()
   },[])
 
   return (
-    <div className="flex-container overflow-hidden" style={{height: "100vh", width: "100vw"}}>
+    <div className="flex-container overflow-hidden transition duration-500" style={{height: "100vh", width: "100vw", backgroundColor: darkMode ? "black" : "white"}}>
         
         <Header appName={appName} logo={logoFile}/>
 
-        <div className="flex ms-[100px] h-[40px] w-full items-center text-gray-500 transition duration-500">
+        <div className={`flex h-[50px] w-full items-center ps-[50px]
+          ${darkMode? "darkMode-bg" : "bg-[rgb(235,235,235)]"} ${darkMode? "darkMode-text" : "lightMode-text"}
+          transition duration-500`}>
           <div 
-            className="flex me-2 p-1 cursor-pointer transition duration-500 hover:text-black 
-            hover:font-bold hover:border-2 border-gray-300 rounded"
+            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
             onClick = {(e)=>dispatch(setCurrentPage("Home"))}
           >Home</div>
           <div 
-            className="flex me-2 p-1 cursor-pointer transition duration-500 hover:text-black 
-          hover:font-bold hover:border-2 border-gray-300 rounded"
+            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
           onClick = {(e)=>dispatch(setCurrentPage("Insights"))}
-          >Analysis</div>
+          >Insights</div>
         </div>
      
         <div className="d-flex w-100" style={{height:"100%"}}>

@@ -12,6 +12,7 @@ const ParetoChart = (props) => {
   const barColor = props.barColor
   const yAxisTitle = props.yAxisTitle
   const xAxisTitle = props.xAxisTitle
+  const darkMode = props.darkMode
 
   const data = {
     labels: labels,
@@ -20,7 +21,7 @@ const ParetoChart = (props) => {
         label: label,
         data: values, // descending values
         backgroundColor: barColor, // bar color with opacity
-        borderColor: 'rgb(255,255,255)',
+        borderColor: 'rgba(255,255,255,0)',
         borderWidth: 0,
       },
     ],
@@ -32,7 +33,7 @@ const ParetoChart = (props) => {
     scales: {
       x: {
         ticks: {
-          color: 'rgb(150,150,150)', // ticks and tick-label color
+          color: darkMode ? "rgb(200,200,200)" : "rgb(150,150,150)" , // ticks and tick-label color
           font: {
             size: 12,
           },
@@ -44,16 +45,19 @@ const ParetoChart = (props) => {
         title: {
           display: true,
           text: xAxisTitle,
-          color: 'rgb(150,150,150)', // x-axis title color
+          color: darkMode ? "rgb(200,200,200)" : "rgb(150,150,150)",
           font: {
             weight: 'bold',
           },
+        },
+        grid: {
+          color: darkMode ? "rgba(100,100,100,0.5)" : "rgba(200,200,200,0.5)", // x-axis grid line color
         },
       },
       y: {
         beginAtZero: true,
         ticks: {
-          color: 'rgb(150,150,150)', // ticks and tick-label color
+          color: darkMode ? "rgb(200,200,200)" : "rgb(150,150,150)" , // ticks and tick-label color
           font: {
             size: 12,
           },
@@ -61,11 +65,14 @@ const ParetoChart = (props) => {
         title: {
           display: true,
           text: yAxisTitle,
-          color: 'rgb(150,150,150)', // y-axis title color
+          color: darkMode ? "rgb(200,200,200)" : "rgb(150,150,150)" , // y-axis title color
           font: {
             size: 12,
           },
           rotate: -90, // rotate y-axis title
+        },
+        grid: {
+          color: darkMode ? "rgba(100,100,100,0.5)" : "rgba(200,200,200,0.5)", // x-axis grid line color
         },
       },
     },
@@ -79,7 +86,7 @@ const ParetoChart = (props) => {
       datalabels: {
         anchor: 'end',
         align: 'end',
-        color: 'rgb(200,200,200)',
+        color: darkMode ? "darkMode-text" : "lightMode-text",
         font: {
           size: 12,
         },
@@ -91,7 +98,7 @@ const ParetoChart = (props) => {
   };
 
   return (
-    <div className="flex w-[90%] h-80"> {/* Adjust container width and height */}
+    <div className="flex w-full h-100"> {/* Adjust container width and height */}
       <Bar data={data} options={options} />
     </div>
   );

@@ -5,6 +5,7 @@ import { setCurrentPage } from '../redux/slices/navSlice'
 import { clearAllStorage } from '../redux/store'; // Import from centralized utility file
 import * as iconsApi from "../apis/icons.js"
 import logo from '../assets/Oomnitza_logo.png';
+import { setDarkMode } from '../redux/slices/envSlice.js';
 
 const Header = (props) => {
 
@@ -15,6 +16,7 @@ const Header = (props) => {
   //Get Global States
   const user = useSelector((state)=>state.authentication.user)
   const userLoggedIn = useSelector((state)=>state.authentication.userLoggedIn)
+  const darkMode = useSelector(state => state.environment.darkMode);
   
   //Set Local States
   const [showUserMenu, setShowUserMenu] = useState(false)
@@ -54,7 +56,12 @@ const Header = (props) => {
         <div 
           className="flex relative right-0 justify-end items-center"
         >
-
+          <div 
+            className="cursor-pointer p-2 hover:font-bold text-[12px] text-gray-500"
+            onClick = {(e)=>dispatch(setDarkMode(!darkMode))}
+          >
+            {darkMode? "Light Mode" : "Dark Mode"}
+          </div>
         </div>
 
         </div>

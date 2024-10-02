@@ -14,6 +14,8 @@ const RackElevationView = (props) => {
   const [showStatus, setShowStatus] = useState(true)
   const [showFloatingPanel, setShowFloatingPanel] = useState(false)
 
+  const darkMode = props.darkMode || false
+
 
   const getServers = () => {
     if (selectedRack != null && servers.length > 0) {
@@ -35,7 +37,9 @@ const RackElevationView = (props) => {
   return (
     <div className="flex flex-col w-full h-100 overflow-hidden transition duration-500">
 
-      <div className="flex font-bold text-[18px] w-full h-[40px] items-center justify-center mb-2 text-center bg-gray-100">Rack Details</div>
+      <div className={`flex font-bold text-[18px] w-full h-[40px] items-center justify-center mb-2 text-center 
+        ${darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"} ${darkMode ? "darkMode-text" : "text-black"} `} 
+        >Rack Details</div>
 
       <div className="flex w-full h-[40px] pe-2 justify-end border-b pb-2">
         <button 
@@ -72,7 +76,7 @@ const RackElevationView = (props) => {
     
     <div className="w-1/2 p-3 ">
 
-      <div className="flex p-1 text-[12px]">
+      <div className={`flex p-1 ${darkMode? "darkMode-text" : "lightMode-text"}`}>
           <input
             type="checkbox"
             className="m-1"
@@ -106,8 +110,8 @@ const RackElevationView = (props) => {
       {Object.entries(selectedRack).map(([k,v],index)=>(
         !["column", "row"].includes(k) && 
         (<tr key={index} className="border-b">
-          <td className="text-left h-[25px] text-gray-500 p-1">{toProperCase(k)}</td>
-          <td className="text-left h-[25px] text-blue-600 p-1">{v}</td>
+          <td className={`text-left h-[25px] ${darkMode ? "darkMode-text" : "lightMode-text"} p-1`}>{toProperCase(k)}</td>
+          <td className={`text-left h-[25px] ${darkMode ? "text-[rgb(255,255,255)]" : "text-[black]"} font-bold p-1`}>{v}</td>
         </tr>)
       ))}
       </tbody>

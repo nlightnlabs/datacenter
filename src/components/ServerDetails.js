@@ -3,9 +3,12 @@ import { toProperCase } from "../functions/formatValue";
 import FloatingPanel    from './FloatingPanel'
 
 // Rack Elevation View Functional Component
-const ServerDetails = ({selectedServer}) => {
+const ServerDetails = (props) => {
 
     const [showFloatingPanel, setShowFloatingPanel] = useState(false)
+
+    const selectedServer = props.selectedServer || null
+    const darkMode = props.darkMode || false
 
     let fieldsToRemove = [
       "height",
@@ -32,7 +35,9 @@ const ServerDetails = ({selectedServer}) => {
   return (
     <div className="flex flex-col w-full h-100 overflow-scroll">
       
-      <div className="flex font-bold text-[18px] w-full h-[40px] items-center justify-center mb-2 text-center bg-gray-100">Server Details</div>
+      <div className={`flex font-bold text-[18px] w-full h-[40px] items-center justify-center mb-2 text-center
+        ${darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"} ${darkMode ? "darkMode-text" : "text-black"} 
+        `}>Server Details</div>
 
       <div className="flex w-full h-[40px] pe-2 justify-end border-b pb-2">
         <button 
@@ -70,8 +75,8 @@ const ServerDetails = ({selectedServer}) => {
       {Object.entries(selectedServer).map(([k,v],index)=>(
         !fieldsToRemove.includes(k) && 
         (<tr key={index} className="border-b">
-          <td className="text-left h-[25px] text-gray-500 p-1 w-1/4">{toProperCase(k.replace("_"," "))}</td>
-          <td className="text-left h-[25px] text-blue-600 p-1">{v}</td>
+          <td className={`text-left h-[25px] ${darkMode ? "darkMode-text" : "lightMode-text"} p-1`}>{toProperCase(k)}</td>
+          <td className={`text-left h-[25px] ${darkMode ? "text-[rgb(255,255,255)]" : "text-[black]"} font-bold p-1`}>{v}</td>
         </tr>)
       ))}
       </tbody>

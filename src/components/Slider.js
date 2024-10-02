@@ -10,6 +10,7 @@ const Slider = (props) => {
   const width = props.width || "150px"
   const fontSize = props.fontSize || "12px"
   const disabled = props.disabled || false
+  const fontColor = props.fontColor
 
   const handleSliderChange = (event) => {
     setValue(event.target.value);
@@ -18,7 +19,7 @@ const Slider = (props) => {
 
   return (
     <div>
-     <div style={{fontSize: fontSize }}>
+     <div style={{fontSize: fontSize }} className={fontColor}>
         {label}: {value} {units}
       </div>
       <input

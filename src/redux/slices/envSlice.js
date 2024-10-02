@@ -8,7 +8,8 @@ export const envSlice = createSlice({
     dbName: "",
     fileStorageBucket: "",
     logoFile: "",
-    theme: ""
+    theme: "",
+    darkMode: false
   },
   reducers: {
     setAppName: (state, action) => {
@@ -26,11 +27,14 @@ export const envSlice = createSlice({
     setTheme: (state, action) => {
       state.theme = action.payload
     },
+    setDarkMode: (state, action) =>{
+      state.darkMode = action.payload
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setAppName, setDbName, setFileStorageBucket, setLogoFile, setTheme} = envSlice.actions
+export const { setAppName, setDbName, setFileStorageBucket, setLogoFile, setTheme, setDarkMode} = envSlice.actions
 
 export const clearStorage = () => ({ type: PURGE, key: 'envStorage', result: () => null });
 

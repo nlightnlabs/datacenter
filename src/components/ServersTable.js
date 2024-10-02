@@ -15,6 +15,7 @@ const ServerDetails = (props) => {
     const [fields, setFields] = useState([])
     const [recordId, setSelectedRecordId] = useState(0)
     const [showRecordDetails, setShowRecordDetails] = useState(false)
+    const darkMode = props.darkMode || false
 
     
     const getTableData = ()=>{
@@ -69,9 +70,15 @@ const ServerDetails = (props) => {
           defaultMinWidth: 50
       },
   }
+
+
+
+
   
   return (
-      <div className="ag-theme-quartz animate__animated animate__fadeIn animate__duration-0.5s" style={{fontSize:"12px", height: "100%", width: "100%" }}>
+      <div 
+      className={`ag-theme-quartz${darkMode? "-dark":''}`}
+      style={{fontSize:"12px", height: "100%", width: "100%" }}>
         <AgGridReact 
           rowData={tableData} 
           columnDefs={fields} 
