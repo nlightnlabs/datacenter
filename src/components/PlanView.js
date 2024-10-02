@@ -1,132 +1,215 @@
-import React, {useState, useEffect} from "react";
-import servers from './data_center_servers.json';
-import '../App.css'
+import React, { useState, useEffect } from "react";
+import Slider from "./Slider";
+import "../App.css";
 
 const PanView = (props) => {
+  const darkMode = props.darkMode || false;
 
-  const room = props.room || 1
+  const [servers, setServers] = useState(props.servers);
+  const [racks, setRacks] = useState(props.racks);
+  const [rackServers, setRackServers] = useState([]);
+  const [selectedRack, setSelectedRack] = useState(props.selectedRack);
 
-  const [serverData, setServerData] = useState(servers)
-  const [horizontalGrids, setHorizontalGrids] = useState([])
-  const [verticalGrids, setVerticalGrids] = useState([])
+  const [maxX, setMaxX] = useState(1000);
+  const [maxZ, setMaxZ] = useState(500);
 
-  const horizontalGridSpacing = props.horizontalGridSpacing || 75
-  const verticalGridSpacing =  props.verticalGridSpacing || 75
-  const [gridContainerWidth, setGridContainerWidth] = useState(null)
-  const [gridContainerHeight, setGridContainerHeight] = useState(null)
+  const [horizontalGrids, setHorizontalGrids] = useState([]);
+  const [verticalGrids, setVerticalGrids] = useState([]);
+  const [gridContainerWidth, setGridContainerWidth] = useState(null);
+  const [gridContainerHeight, setGridContainerHeight] = useState(null);
 
-  const getGrids = ()=>{
-    let horizontalGrids = new Set()
-    serverData.map(item =>{
-      horizontalGrids.add(item.row)
-    })
+  const [scaleFactor, setScaleFactor] = useState(1);
+  const [translateX, setTranslateX] = useState(0);
+  const [translateY, setTranslateY] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [initialMouseX, setInitialMouseX] = useState(0);
+  const [initialMouseY, setInitialMouseY] = useState(0);
 
-    let verticalGrids = new Set()
-    serverData.map(item =>{
-      verticalGrids.add(item.column)
-    })
+  const getGrids = () => {
+    let horizontalGrids = new Set();
+    servers.forEach((item) => {
+      const gridData = {
+        label: item.row,
+        z: item.z,
+      };
+      horizontalGrids.add(gridData);
+    });
 
-    horizontalGrids = Array.from(horizontalGrids)
-    verticalGrids = Array.from(verticalGrids)
-    setHorizontalGrids(horizontalGrids)
-    setVerticalGrids(verticalGrids)
-    
-    setGridContainerWidth((verticalGrids.length - 1)*verticalGridSpacing)
-    setGridContainerHeight((horizontalGrids.length - 1)*horizontalGridSpacing)
-  }
+    let verticalGrids = new Set();
+    servers.forEach((item) => {
+      const gridData = {
+        label: item.column,
+        x: item.x,
+      };
+      verticalGrids.add(gridData);
+    });
 
-  const [racks, setRacks] = useState([])
+    setHorizontalGrids(Array.from(horizontalGrids));
+    setVerticalGrids(Array.from(verticalGrids));
 
-  const getRacks = ()=>{
+    const maxX = Math.max(...Array.from(verticalGrids).map((grid) => grid.x));
+    const maxZ = Math.max(...Array.from(horizontalGrids).map((grid) => grid.z));
 
-    let rack_data = new Set()
-    serverData.map(item =>{
-      let rack = {
-        rack_id: item.rack_id,
-        X: item.X,
-        Y: item.Y,
-        rack_model: item.rack_model
-      }
-      rack_data.add(rack)
-    })
-    rack_data = Array.from(rack_data)
-    setRacks(rack_data)
-  }
+    setMaxX(maxX);
+    setMaxZ(maxZ);
+    setGridContainerWidth(maxX);
+    setGridContainerHeight(maxZ);
+  };
 
+  useEffect(() => {
+    getGrids();
+  }, [props]);
 
-  useEffect(()=>{
-    getGrids()
-    getRacks()
-  },[])
+  useEffect(() => {
+    // Calculate initial translation to center the grid
+    const initialTranslateX = (window.innerWidth - gridContainerWidth)/2;
+    const initialTranslateY = (gridContainerHeight/2);
+    setTranslateX(initialTranslateX);
+    setTranslateY(initialTranslateY);
+  }, [gridContainerWidth, gridContainerHeight]);
+
+  const handleMouseDown = (e) => {
+    setDragging(true);
+    setInitialMouseX(e.clientX);
+    setInitialMouseY(e.clientY);
+  };
+
+  const handleMouseUp = () => {
+    setDragging(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (dragging) {
+      const dx = e.clientX - initialMouseX;
+      const dy = e.clientY - initialMouseY;
+      setTranslateX((prev) => prev + dx);
+      setTranslateY((prev) => prev + dy);
+      setInitialMouseX(e.clientX);
+      setInitialMouseY(e.clientY);
+    }
+  };
+
+  const handleZoom = (value) => {
+    setScaleFactor(value / 10); // Zoom slider can control scale from 0.01 to 2
+  };
 
   return (
-
-    <div className="flex  h-100 w-full justify-center align-items-top overflow-scroll">
-      
-      <div className="mt-[120px]">
-        {gridContainerWidth && gridContainerHeight &&
-
-          <div 
-            className={`relative border-2 border-green-300`}
-            style = {{width: `${gridContainerWidth}px`, height: `${gridContainerHeight}px`}}
-          >
-
-            {horizontalGrids.map((item, i)=>(
-
-              <div key={i+1} style={{position: "absolute", padding:0, top:`${(i) * horizontalGridSpacing}px`, width: "100%", textAlign: "left"}}>
-                <div className="absolute w-full p-0">
-                  <div className={`absolute border-t-[0.5px] border-gray-300 border-dashed w-full p-0`}></div>
-                  <div className={`absolute border-t-[0.5px] border-gray-300 border-dashed w-[70px] -ml-[70px] p-0`}></div>
-                  <div 
-                    className={`border-[0.5px] w-[30px] h-[30px] rounded-[15px] text-center text-gray-300 border-gray-300 border-dashed} p-0`}
-                    style = {{marginTop: "-15px", marginLeft: "-100px"}}
-                  >{item}
-                  </div>
-                  
-                </div>
-    
-              </div>
-              
-              ))
-            }
-
-            {verticalGrids.map((item, i)=>(
-
-              <div key={i+1} style={{position: "absolute", left:`${(i) * verticalGridSpacing}px`, height: "100%", textAlign: "top"}}>
-                <div className="absolute h-100">
-                  <div className={`absolute border-l-[0.5px] border-gray-300 border-dashed h-100 p-0`}></div>
-                  <div className={`absolute border-l-[0.5px] border-gray-300 border-dashed h-[70px] -mt-[70px] p-0`}></div>
-                  <div 
-                    className={`border-[0.5px] w-[30px] h-[30px] rounded-[15px] text-center text-gray-300 border-gray-300 border-dashed} p-0`}
-                    style = {{marginLeft: "-15px", marginTop: "-100px"}}
-                  >{item}
-                  </div>
-                </div>
-
-              </div>
-            ))
-            }
-
-            {/* plot racks */}
-            {
-              racks.length>0 && racks.map((item, i)=>(
-                <div 
-                  key={i+1} 
-                  style={{position: "absolute", left:`${(horizontalGrids.indexOf(item.X))*horizontalGridSpacing - 20}px`, top:`${item.Y*verticalGridSpacing - 10}px`}}
-                  className="w-[40px] h-[20px] bg-gray-100 text-[10px] text-center "
-                >
-                  {item.rack_id}
-                </div>
-              ))
-            } 
-
-          </div>
-        }
-
+    <div className="flex flex-col h-full w-full justify-center items-top overflow-hidden">
+      <div
+        className={`flex justify-end text-[12px] align-items-center w-full p-2 flex-wrap ${
+          darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"
+        }`}
+      >
+        <div className="me-4">
+          <Slider
+            label="Zoom"
+            units=""
+            min={1}
+            max={200}
+            value={scaleFactor * 100}
+            updateParent={(value) => handleZoom(value)}
+            width={"100px"}
+            fontColor={darkMode ? "darkMode-text" : "lightMode-text"}
+          />
+        </div>
       </div>
 
+      <div
+        className="relative overflow-hidden"
+        style={{
+          cursor: dragging ? "grabbing" : "grab",
+          width: "100%",
+          height: "80vh",
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+      >
+        <div
+          style={{
+            width: `${gridContainerWidth}px`,
+            height: `${gridContainerHeight}px`,
+            transform: `translate(${translateX}px, ${translateY}px) scale(${scaleFactor})`,
+            transformOrigin: "0 0",
+          }}
+        >
+          {/* Horizontal Grid Lines */}
+          {horizontalGrids.map((grid, index) => (
+            <div
+              key={`horizontal-grid-${index}`}
+              style={{
+                position: "absolute",
+                top: `${grid.z}px`,
+                left: `${-100}px`,
+                width: `${gridContainerWidth+100}px`,
+              }}
+            >
+            <div 
+            className="absolute flex items-center justify-center text-center"
+            style={{top: "-12px", height: "24px", width: "24px", borderRadius: "12px",
+            border: darkMode
+                  ? "1px solid rgb(100,100,100)"
+                  : "1px solid rgb(200,200,200)",
+            color: darkMode
+              ? "rgb(100,100,100)"
+              : "rgb(200,200,200)",
+            }}>{grid.label}</div>
+
+            <div 
+            className="ms-[24px]"
+            style={{left: "24px", borderTop: darkMode
+                  ? "1px dashed rgb(100,100,100)"
+                  : "1px dashed rgb(200,200,200)"}}></div>
+            </div>
+          ))}
+
+          {/* Vertical Grid Lines */}
+          {verticalGrids.map((grid, index) => (
+            <div
+              key={`vertical-grid-${index}`}
+              style={{
+                position: "absolute",
+                left: `${grid.x}px`,
+                top: 0,
+                height: "100%",
+                borderLeft: darkMode
+                  ? "1px dashed rgb(100,100,100)"
+                  : "1px dashed rgb(200,200,200)",
+              }}
+            />
+          ))}
+
+          {/* Racks */}
+          {racks.length > 0 &&
+            racks.map((rack, i) => (
+              <div
+                key={i + 1}
+                style={{
+                  position: "absolute",
+                  left: `${rack.x - 24/2}px`,
+                  top: `${rack.z - 42/2}px`,
+                  width: "24px",
+                  height: "42px",
+                  backgroundColor: darkMode
+                    ? "rgb(200,200,200)"
+                    : "rgb(100,100,100)",
+                  border: darkMode
+                    ? "1px solid rgb(100,100,100)"
+                    : "1px solid rgb(200,200,200)",
+                  cursor: "pointer"
+                }}
+                className={`w-[40px] h-[20px] text-[10px] text-center ${
+                  darkMode ? "darkMode-bg" : "lightMode-bg"
+                } ${darkMode ? "darkMode-border" : "lightMode-border"} border-2px`}
+                onClick={() => setSelectedRack(rack)}
+              ></div>
+            ))}
+        </div>
+      </div>
     </div>
   );
 };
 
 export default PanView;
+

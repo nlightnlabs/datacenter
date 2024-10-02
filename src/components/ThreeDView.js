@@ -289,8 +289,7 @@ const View = (props) => {
         </div>
       </div>
 
-      
-
+    
       <div className="relative flex flex-col w-full overflow-hidden h-[500px]">
 
         <Canvas>

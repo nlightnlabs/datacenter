@@ -108,7 +108,7 @@ const RackElevationView = (props) => {
       <table className="text-[12px]">
       <tbody>
       {Object.entries(selectedRack).map(([k,v],index)=>(
-        !["column", "row"].includes(k) && 
+        !["column", "row", "x","z"].includes(k) && 
         (<tr key={index} className="border-b">
           <td className={`text-left h-[25px] ${darkMode ? "darkMode-text" : "lightMode-text"} p-1`}>{toProperCase(k)}</td>
           <td className={`text-left h-[25px] ${darkMode ? "text-[rgb(255,255,255)]" : "text-[black]"} font-bold p-1`}>{v}</td>

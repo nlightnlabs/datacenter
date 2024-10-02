@@ -63,7 +63,9 @@ const Room = (props) => {
         width: serverData.filter(i=>i.rack_id ===item)[0].rack_width,
         depth: serverData.filter(i=>i.rack_id ===item)[0].rack_depth,
         description: serverData.filter(i=>i.rack_id ===item)[0].rack_description,
-        photo: serverData.filter(i=>i.rack_id ===item)[0].rack_photo
+        photo: serverData.filter(i=>i.rack_id ===item)[0].rack_photo,
+        x: serverData.filter(i=>i.rack_id ===item)[0].grid_x,
+        z: serverData.filter(i=>i.rack_id ===item)[0].grid_z
       }
       racks = [...racks,rack]
     })
@@ -103,6 +105,7 @@ const Room = (props) => {
     getRooms()
     getStatuses()
     getServers()
+
   },[selectedRoom])
 
   useEffect(()=>{
@@ -159,7 +162,17 @@ const Room = (props) => {
 
             {view ==="plan" &&
               <div className="flex w-full h-100 overflow-hidden transition duration-500" style={{transition: "0.5s"}} > 
-                <PlanView onRackClick={(rackId)=>handleRackClick(rackId)} />
+                <PlanView 
+                  servers = {servers}
+                  racks = {racks}
+                  statuses = {statuses}
+                  selectedRoom = {selectedRoom}
+                  selectedRack={selectedRack} 
+                  selectedServer = {selectedServer}
+                  setSelectedServer = {setSelectedServer}
+                  setSelectedRack = {setSelectedRack}
+                  darkMode = {darkMode}
+                />
               </div>
             }
 

@@ -13,6 +13,8 @@ import Header from "./components/Header";
 import Menu from "./components/Menu.js"
 import Insights from './components/Insights.js';
 
+import MapView from './components/MapView.js';
+
 
 // Set application details:
 export const appName = "Data Center Manager"
@@ -39,8 +41,9 @@ function App() {
   
   // Setup data
   const pageData = [
-    { id: 1, section: 1, name: "Home", label: "Home", icon: "HomeIcon", component: <Home/>, showOnMenu: true},
-    { id: 2, section: 1, name: "Insights", label: "Insights", icon: "AnalysisIcon", component: <Insights/>, showOnMenu: true},
+    { id: 1, section: 1, name: "Map", label: "Map", icon: "MapIcon", component: <MapView/>, showOnMenu: true},
+    { id: 2, section: 1, name: "Home", label: "Room", icon: "HomeIcon", component: <Home/>, showOnMenu: true},
+    { id: 3, section: 1, name: "Insights", label: "Insights", icon: "AnalysisIcon", component: <Insights/>, showOnMenu: true},
   ];
 
   const getPages = async ()=>{
@@ -89,6 +92,10 @@ function App() {
         <div className={`flex h-[50px] w-full items-center ps-[50px]
           ${darkMode? "darkMode-bg" : "bg-[rgb(235,235,235)]"} ${darkMode? "darkMode-text" : "lightMode-text"}
           transition duration-500`}>
+            <div 
+            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
+            onClick = {(e)=>dispatch(setCurrentPage("Map"))}
+          >Map</div>
           <div 
             className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
             onClick = {(e)=>dispatch(setCurrentPage("Home"))}
@@ -102,7 +109,7 @@ function App() {
         <div className="d-flex w-100" style={{height:"100%"}}>
             <div className="d-flex w-100 justify-content-between" style={{height:"100%"}}>
                 {/* {menuItems.length>0 && <Menu menuItems={menuItems} colorTheme={theme}/> } */}
-                {pages.length>0 && pageData.find(i=>i.name ===currentPage).component}
+                {pageData.length>0 && pageData.find(i=>i.name ===currentPage).component}
             </div>
         </div>
 
