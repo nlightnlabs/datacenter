@@ -97,10 +97,6 @@ const Room = (props) => {
     setStatuses(statuses)
   }
 
-  const handleRackClick = (rackId) => {
-    setSelectedRack(rackId);
-  };
-
   useEffect(()=>{
     getRooms()
     getStatuses()
@@ -109,13 +105,17 @@ const Room = (props) => {
   },[selectedRoom])
 
   useEffect(()=>{
- 
+    
     if(selectedServer != null){
       const selected_rack_id = servers.find(i=>i.id === selectedServer.id).rack_id
       const selected_rack = racks.find(i=>i.id ===selected_rack_id)
       setSelectedRack(selected_rack)
     }
   },[selectedServer])
+
+  useEffect(()=>{
+    console.log(selectedRack)
+  },[selectedRack])
 
   const handleRoomChange = (event) => {
     setSelectedRoom(event.target.value); // Update the state with the selected room

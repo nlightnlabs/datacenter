@@ -4,7 +4,6 @@ import ParetoChart from './ParetoChart'
 import DoughnutChart from './DoughnutChart'
 import StackedBarChart from './StackedBarChart'
 
-import costData from './cost.json'
 
 const Insights = () => {
 

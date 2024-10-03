@@ -110,7 +110,8 @@ function App() {
      
         <div className="d-flex w-100" style={{height:"100%"}}>
             <div className="d-flex w-100 justify-content-between" style={{height:"100%"}}>
-                {pageData.length>0 && pageData.find(i=>i.name===currentPage).component}
+                {/* {menuItems.length>0 && <Menu menuItems={menuItems} colorTheme={theme}/> } */}
+                {pageData.length>0 && pageData.find(i=>i.name ===currentPage).component}
             </div>
         </div>
 

@@ -4,7 +4,7 @@ import { setUser, setUserLoggedIn } from '../redux/slices/authSlice'
 import { setCurrentPage } from '../redux/slices/navSlice'
 import { clearAllStorage } from '../redux/store'; // Import from centralized utility file
 import * as iconsApi from "../apis/icons.js"
-import logo from '../assets/Oomnitza_logo.png';
+import logo from '../assets/Oomnitza Logo White on Black.png';
 import { setDarkMode } from '../redux/slices/envSlice.js';
 
 const Header = (props) => {
@@ -23,8 +23,8 @@ const Header = (props) => {
   
   const HeaderStyle = {
     position: "relative",
-    height: "75px",
-    borderBottom:"1px solid lightgray",
+    height: "50px",
+    backgroundColor:"black"
   }
 
   const [userMenuTop, setUserMenuTop] = useState(null)

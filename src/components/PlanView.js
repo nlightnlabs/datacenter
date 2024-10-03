@@ -202,7 +202,7 @@ const PanView = (props) => {
                 className={`w-[40px] h-[20px] text-[10px] text-center ${
                   darkMode ? "darkMode-bg" : "lightMode-bg"
                 } ${darkMode ? "darkMode-border" : "lightMode-border"} border-2px`}
-                onClick={() => setSelectedRack(rack)}
+                onClick={(e) => props.setSelectedRack(rack)}
               ></div>
             ))}
         </div>
