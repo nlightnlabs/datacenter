@@ -94,14 +94,17 @@ function App() {
         <div className={`flex h-[50px] w-full items-center ps-[50px]
           ${darkMode? "darkMode-bg" : "bg-[rgb(235,235,235)]"} ${darkMode? "darkMode-text" : "lightMode-text"}
           transition duration-500`}>
-            <div 
-            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
-            onClick = {(e)=>dispatch(setCurrentPage("Map"))}
-          >Map</div>
+           
           <div 
             className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
             onClick = {(e)=>dispatch(setCurrentPage("Home"))}
           >Home</div>
+
+          <div 
+            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
+            onClick = {(e)=>dispatch(setCurrentPage("Map"))}
+          >Map</div>
+
           <div 
             className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
           onClick = {(e)=>dispatch(setCurrentPage("Insights"))}

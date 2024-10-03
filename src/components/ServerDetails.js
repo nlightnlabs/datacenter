@@ -63,7 +63,6 @@ const ServerDetails = (props) => {
           className="text-yellow-500 border-2 border-yellow-500 text-[12px] h-[30px] ms-3 ps-2 pe-2 rounded cursor-pointer
           hover:bg-yellow-500 hover:text-white transition duration-500
           "
-          onClick = {(e)=>setShowFloatingPanel(true)}
           >
             Modify
         </button>
