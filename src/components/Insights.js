@@ -25,7 +25,11 @@ const Insights = () => {
             <div className="flex w-full">
 
               <div className={`relative flex flex-col rounded shadow-md w-1/4 min-w-[250px]
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}`}>
+                 ${darkMode? "darkMode-text": "lightMode-text"} 
+                 ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-bg" : "lightMode-bg"}
+                 `}
+                 >
                   <div className="flex w-full h-100 justify-center items-center">
                     <DoughnutChart
                       labels = {['West', 'East', 'North', 'South']}
@@ -40,7 +44,9 @@ const Insights = () => {
               </div>
 
               <div className={`flex flex-col rounded shadow-md w-3/4 min-w-[500px] h-100 ms-3
-                  ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                  ${darkMode? "darkMode-text": "lightMode-text"} 
+                  ${darkMode? "darkMode-border" : "lightMode-border"}
+                  ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
                   <div className="flex text-[20px] h-[40px] justify-center items-center font-bold">Cost By Month</div>
                   <div className="flex h-5/6 ps-3 pe-3 w-full">
@@ -64,9 +70,11 @@ const Insights = () => {
             <div className="flex w-full">
 
               <div className={`relative flex flex-col rounded shadow-md w-1/4 min-w-[250px]
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"} 
+                 ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
-                  <div className="flex w-full  h-100 justify-center items-center">
+                  <div className={`flex w-full  h-100 justify-center items-center`}>
                     <DoughnutChart
                       labels = {['Blind', 'Dynamic']}
                       values = {[30,70]}
@@ -82,7 +90,9 @@ const Insights = () => {
               </div>
 
               <div className={`flex flex-col rounded shadow-md w-3/4 min-w-[400px] h-100 ms-3
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"} 
+                 ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
                   <div className="flex text-[20px] h-[40px] justify-center items-center font-bold">Cycle Count By Asset Type</div>
                   <div className="flex w-full h-5/6 ps-3 pe-3">
@@ -110,7 +120,9 @@ const Insights = () => {
               </div>
             
               <div className={`flex flex-col rounded shadow-md w-3/4 min-w-[500px] h-100 ms-3
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"} 
+                 ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
                   <div className="flex text-[20px] h-[40px] justify-center items-center font-bold">Cycle Count By Month</div>
                   <div className="flex h-5/6 ps-3 pe-3 w-full">
@@ -135,9 +147,11 @@ const Insights = () => {
         <div className="flex w-[80%] h-[300px] mx-auto justify-between ms-[10%] overflow-hidden mb-3">
             <div className="flex w-1/2">
               <div className={`relative flex flex-col rounded shadow-md w-1/4 min-w-[200px]
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"} 
+                 ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
-                  <div className="flex w-full h-100 justify-center items-center">
+                  <div className={`flex w-full h-100 justify-center items-center`}>
                     <DoughnutChart
                       labels = {['California', 'Ohio', 'Virgina', 'Oregon']}
                       values = {[1.0, 0.6, 0.5, 0.4]}
@@ -152,7 +166,9 @@ const Insights = () => {
               </div>
 
               <div className={`flex flex-col rounded shadow-md w-3/4 min-w-[300px] h-100 ms-3
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"}
+                  ${darkMode? "darkMode-border" : "lightMode-border"}
+                  ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
                   <div className="flex text-[20px] h-[40px] justify-center items-center font-bold">Monthly Power Consumption</div>
                   <div className="flex w-full h-5/6 ps-3 pe-3">
@@ -172,7 +188,9 @@ const Insights = () => {
 
             <div className="flex w-1/2 ms-3">
               <div className={`relative flex flex-col rounded shadow-md w-1/4 min-w-[200px]
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"}
+                  ${darkMode? "darkMode-border" : "lightMode-border"}
+                  ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
                   <div className="flex w-full h-100 justify-center items-center">
                     <DoughnutChart
@@ -181,7 +199,7 @@ const Insights = () => {
                       darkMode = {darkMode}
                       fontSize = {12}
                     />
-                  <div className="absolute top-[55%] justify-center flex flex-col">
+                  <div className={`absolute top-[55%] justify-center flex flex-col`}>
                     <div className={`flex w-full justify-center font-bold text-[28px] ${darkMode? "darkMode-text" : "text-black"}`}>1.05</div>
                     <div className={`flex w-full justify-center text-[12px] ${darkMode? "darkMode-text" : "lightmode-text"}`}>Metric Tons CO2</div>
                   </div>
@@ -189,7 +207,9 @@ const Insights = () => {
               </div>
 
               <div className={`flex flex-col rounded shadow-md w-3/4 min-w-[300px] h-100 ms-3
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"} 
+                 ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
                   <div className="flex text-[20px] h-[40px] justify-center items-center font-bold">Carbon Emissions</div>
                   <div className="flex w-full h-5/6 ps-3 pe-3">
@@ -214,9 +234,11 @@ const Insights = () => {
          <div className="flex w-[80%] h-[300px] mx-auto justify-between ms-[10%] overflow-hidden mb-3">
             <div className="flex w-full">
               <div className={`relative flex flex-col rounded shadow-md w-1/4 min-w-[250px]
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"} 
+                 ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
-                  <div className="flex w-full h-100 justify-center items-center">
+                  <div className={`flex w-full h-100 justify-center items-center`}>
                     <DoughnutChart
                       labels = {['Downtime', 'Uptime']}
                       values = {[15, 85]}
@@ -229,7 +251,9 @@ const Insights = () => {
                   </div>
               </div>
               <div className={`flex flex-col rounded shadow-md w-3/4 min-w-[300px] h-100 ms-3
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"} 
+                 ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
                   <div className="flex text-[20px] h-[40px] justify-center items-center font-bold">Monthly Average Uptime</div>
                   <div className="flex w-full h-5/6 ps-3 pe-3">
@@ -252,7 +276,9 @@ const Insights = () => {
         <div className="flex w-[80%] h-[300px] mx-auto justify-between ms-[10%] overflow-hidden mb-3">
             <div className="flex w-full">
               <div className={`relative flex flex-col rounded shadow-md w-1/4 min-w-[250px]
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"}
+                  ${darkMode? "darkMode-border" : "lightMode-border"}
+                  ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
                   <div className="flex w-full h-100 justify-center items-center">
                     <DoughnutChart
@@ -267,7 +293,9 @@ const Insights = () => {
                   </div>
               </div>
               <div className={`flex flex-col rounded shadow-md w-3/4 min-w-[300px] h-100 ms-3
-                 ${darkMode? "darkMode-text": "lightMode-text"} ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-text": "lightMode-text"} 
+                 ${darkMode? "darkMode-border" : "lightMode-border"}
+                 ${darkMode? "darkMode-bg" : "lightMode-bg"}
                 `}>
                   <div className="flex text-[20px] h-[40px] justify-center items-center font-bold">Monthly Average Respose Time</div>
                   <div className="flex w-full h-5/6 ps-3 pe-3">

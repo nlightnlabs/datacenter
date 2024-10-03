@@ -57,7 +57,7 @@ const Header = (props) => {
           className="flex relative right-0 justify-end items-center"
         >
           <div 
-            className="cursor-pointer p-2 hover:font-bold text-[12px] text-gray-500"
+            className="cursor-pointer p-2 hover:font-bold text-[14px] darkMode-button"
             onClick = {(e)=>dispatch(setDarkMode(!darkMode))}
           >
             {darkMode? "Light Mode" : "Dark Mode"}

@@ -91,22 +91,22 @@ function App() {
         
         <Header appName={appName} logo={logoFile}/>
 
-        <div className={`flex h-[50px] w-full items-center ps-[50px]
-          ${darkMode? "darkMode-bg" : "bg-[rgb(235,235,235)]"} ${darkMode? "darkMode-text" : "lightMode-text"}
+        <div className={`flex h-[50px] w-full items-center ps-[50px text-[16px]]
+          ${darkMode? "darkMode-bg" : "bg-[rgb(235,235,235)]"} ${darkMode? "darkMode-text" : "black"}
           transition duration-500`}>
            
           <div 
-            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
+            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[75px]`}
             onClick = {(e)=>dispatch(setCurrentPage("Home"))}
           >Home</div>
 
           <div 
-            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
+            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[75px]`}
             onClick = {(e)=>dispatch(setCurrentPage("Map"))}
           >Map</div>
 
           <div 
-            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
+            className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[75px]`}
           onClick = {(e)=>dispatch(setCurrentPage("Insights"))}
           >Insights</div>
         </div>

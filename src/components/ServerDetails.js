@@ -43,7 +43,7 @@ const ServerDetails = (props) => {
       
       <div className={`flex items-center justify-between mb-2 ${darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"} ${darkMode ? "darkMode-text" : "text-black"}`}>
        
-       <div className={`flex font-bold text-[18px] w-full h-[40px] items-center justify-center text-center`} 
+       <div className={`flex font-bold text-[18px] w-full h-[40px] items-center justify-center text-center ${darkMode? "darkMode-text" : "lightMode-text"}`} 
           >Server Details
         </div>
         <div
@@ -53,7 +53,7 @@ const ServerDetails = (props) => {
           iconName = "CloseIcon"
           height = "30px"
           width = "30px"
-          fillColor = {`${darkMode? "rgb(200,200,200)" : "rgb(100,100,100)"}`}
+          fillColor = {`${darkMode? "rgb(200,200,200)" : "gray"}`}
           />
           </div>
       </div>

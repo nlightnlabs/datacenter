@@ -145,8 +145,8 @@ const PanView = (props) => {
       >
         <div
           style={{
-            width: `${gridContainerWidth}px`,
-            height: `${gridContainerHeight}px`,
+            width: `${gridContainerWidth + 100}px`,
+            height: `${gridContainerHeight + 100}px`,
             transform: `translate(${translateX}px, ${translateY}px) scale(${scaleFactor})`,
             transformOrigin: "0 0",
           }}
@@ -194,7 +194,7 @@ const PanView = (props) => {
               }}
             >
                <div 
-                className="absolute flex items-center justify-center text-center"
+                className="flex items-center justify-center text-center"
                 style={{left: "-12px", height: "24px", width: "24px", borderRadius: "12px",
                 border: darkMode
                       ? "1px solid rgb(100,100,100)"

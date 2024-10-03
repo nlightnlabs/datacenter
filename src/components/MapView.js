@@ -19,7 +19,9 @@ const dataCenters = [
   { id: 5, name: "Jurupa Valley", lat: 33.9943, lng: -117.4972, "Total Servers": 500, "Annual Cost": "$27.2M", "Carbon Footprint": "0.8MT CO2" }, 
 ];
 
+
 const MapComponent = () => {
+
   const darkMode = useSelector(state => state.environment.darkMode);
   const dispatch = useDispatch();
   const [hoveredCenter, setHoveredCenter] = useState(null);
@@ -77,16 +79,11 @@ const MapComponent = () => {
             top: `${cursorPosition.y}px`, // Use cursor's y-position
             left: `${cursorPosition.x}px`, // Use cursor's x-position
             transform: 'translate(-50%, -100%)', // Move the div above and centered at the cursor
-            backgroundColor: darkMode ? "#333" : "#fff",
-            padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "5px",
             zIndex: 1000,
             pointerEvents: 'auto', // Ensure the div can be interacted with
           }}
-          className={`p-2 rounded-md shadow-md flex flex-col text-start overflow-hidden
+          className={`flex flex-col p-2 rounded-md shadow-md  overflow-hidden justify-start
             ${darkMode ? "darkMode-bg" : "lightMode-bg"}
-            ${darkMode ? "darkMode-button" : "lightMode-button"} 
             ${darkMode ? "darkMode-border" : "lightMode-border"} 
             ${darkMode ? "darkMode-text" : "lightMode-text"}`}
           onMouseEnter={() => setIsDivHovered(true)} // Keep the div visible when hovered
@@ -98,10 +95,10 @@ const MapComponent = () => {
           <h6>{hoveredCenter.name}</h6>
           {Object.entries(hoveredCenter).map(([key, value], i) => (
             <div key={i}>
-              {key}: <span>{value}</span>
+              {key}: <span className="ms-2 font-bold">{value}</span>
             </div>
           ))}
-          <div className="flex w-full p-2 justify-between">
+          <div className={`flex w-full p-2 justify-between border-t-[1px] mt-2 border-t-[${darkMode ?"rgb(50,50,50)" : "rgb(200,200,200)]"}`}>
             <button className={`${darkMode ? "darkMode-button" : "lightMode-button"} hover:cursor-pointer`} onClick={() => goToCenter("Home")}>Details</button>
             <button className={`${darkMode ? "darkMode-button" : "lightMode-button"} hover: cursor-pointer`} onClick={() => goToCenter("Insights")}>Insights</button>
           </div>
