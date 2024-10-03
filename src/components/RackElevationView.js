@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import serverData from './data_center_servers.json';
 import { toProperCase } from "../functions/formatValue";
 import FloatingPanel from "./FloatingPanel";
+import Svg from "./Svg"
 
 // Rack Elevation View Functional Component
 const RackElevationView = (props) => {
@@ -9,6 +10,7 @@ const RackElevationView = (props) => {
   const [servers, setServers] = useState(props.servers);
   const [rackServers, setRackServers] = useState([])
   const selectedRack = props.selectedRack
+  const setSelectedRack = props.setSelectedRack
   const [selectedServer, setSelectedServer] = useState(props.selectedServer);
 
   const [showStatus, setShowStatus] = useState(true)
@@ -33,13 +35,32 @@ const RackElevationView = (props) => {
     getServers();
   }, [props]);
 
+  const clearSelection = ()=>{
+    props.setSelectedServer(null)
+    props.setSelectedRack(null)
+  }
+
 
   return (
     <div className="flex flex-col w-full h-100 overflow-hidden transition duration-500">
 
-      <div className={`flex font-bold text-[18px] w-full h-[40px] items-center justify-center mb-2 text-center 
-        ${darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"} ${darkMode ? "darkMode-text" : "text-black"} `} 
-        >Rack Details</div>
+      <div className={`flex items-center justify-between mb-2 ${darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"} ${darkMode ? "darkMode-text" : "text-black"}`}>
+       
+       <div className={`flex font-bold text-[18px] w-full h-[40px] items-center justify-center text-center`} 
+          >Rack Details
+        </div>
+        <div
+          onClick = {()=>clearSelection()}
+        >
+        <Svg 
+          iconName = "CloseIcon"
+          height = "30px"
+          width = "30px"
+          fillColor = {`${darkMode? "rgb(200,200,200)" : "rgb(100,100,100)"}`}
+          />
+          </div>
+      </div>
+     
 
       <div className="flex w-full h-[40px] pe-2 justify-end border-b pb-2">
         <button 

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { toProperCase } from "../functions/formatValue";
 import FloatingPanel    from './FloatingPanel'
+import Svg from "./Svg"
 
 // Rack Elevation View Functional Component
 const ServerDetails = (props) => {
@@ -32,12 +33,30 @@ const ServerDetails = (props) => {
       "z",
     ]
 
+    const clearSelection = ()=>{
+      props.setSelectedServer(null)
+      props.setSelectedRack(null)
+    }
+
   return (
     <div className="flex flex-col w-full h-100 overflow-scroll">
       
-      <div className={`flex font-bold text-[18px] w-full h-[40px] items-center justify-center mb-2 text-center
-        ${darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"} ${darkMode ? "darkMode-text" : "text-black"} 
-        `}>Server Details</div>
+      <div className={`flex items-center justify-between mb-2 ${darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"} ${darkMode ? "darkMode-text" : "text-black"}`}>
+       
+       <div className={`flex font-bold text-[18px] w-full h-[40px] items-center justify-center text-center`} 
+          >Server Details
+        </div>
+        <div
+          onClick = {()=>clearSelection()}
+        >
+        <Svg 
+          iconName = "CloseIcon"
+          height = "30px"
+          width = "30px"
+          fillColor = {`${darkMode? "rgb(200,200,200)" : "rgb(100,100,100)"}`}
+          />
+          </div>
+      </div>
 
       <div className="flex w-full h-[40px] pe-2 justify-end border-b pb-2">
         <button 

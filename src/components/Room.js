@@ -166,7 +166,6 @@ const Room = (props) => {
                   servers = {servers}
                   racks = {racks}
                   statuses = {statuses}
-                  selectedRoom = {selectedRoom}
                   selectedRack={selectedRack} 
                   selectedServer = {selectedServer}
                   setSelectedServer = {setSelectedServer}
@@ -200,6 +199,7 @@ const Room = (props) => {
                   servers = {servers}
                   selectedRoom = {selectedRoom}
                   selectedRack={selectedRack} 
+                  setSelectedRack={setSelectedRack}
                   selectedServer = {selectedServer}
                   setSelectedServer = {setSelectedServer}
                   darkMode = {darkMode}
@@ -215,7 +215,10 @@ const Room = (props) => {
           >
               <ServersTable
                 servers = {servers}
+                selectedServer = {selectedServer}
                 setSelectedServer = {setSelectedServer}
+                selectedRack={selectedRack} 
+                setSelectedRack={setSelectedRack}
                 darkMode = {darkMode}
               />
           </div>
@@ -224,7 +227,10 @@ const Room = (props) => {
             <div 
               className={`flex flex-col w-full md:w-[30%] min-w-[300px] h-[500px] overflow-hidden rounded-md shadow-md md:ms-5 transition duration-500 ${darkMode ? "darkMode-bg" : "lightMode-bg"}`}>
               <ServerDetails 
-              selectedServer={selectedServer}
+              selectedServer = {selectedServer}
+              setSelectedServer = {setSelectedServer}
+              selectedRack={selectedRack} 
+              setSelectedRack={setSelectedRack}
               darkMode = {darkMode}
               />
             </div>

@@ -93,6 +93,16 @@ const PanView = (props) => {
     setScaleFactor(value / 10); // Zoom slider can control scale from 0.01 to 2
   };
 
+  const clearSelection = ()=>{
+    props.setSelectedServer(null)
+    props.setSelectedRack(null)
+  }
+
+  const handleClick = (rack)=>{
+    setSelectedRack(rack)
+    props.setSelectedRack(rack)
+  } 
+
   return (
     <div className="flex flex-col h-full w-full justify-center items-top overflow-hidden">
       <div
@@ -112,6 +122,13 @@ const PanView = (props) => {
             fontColor={darkMode ? "darkMode-text" : "lightMode-text"}
           />
         </div>
+
+        <div className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
+        onClick = {(e)=>clearSelection(null)}
+        >
+          Clear
+        </div>
+
       </div>
 
       <div
@@ -164,20 +181,35 @@ const PanView = (props) => {
             </div>
           ))}
 
+
           {/* Vertical Grid Lines */}
           {verticalGrids.map((grid, index) => (
             <div
               key={`vertical-grid-${index}`}
               style={{
                 position: "absolute",
-                left: `${grid.x}px`,
-                top: 0,
+                left: `${grid.x+12}px`,
+                top: "-100px",
                 height: "100%",
-                borderLeft: darkMode
-                  ? "1px dashed rgb(100,100,100)"
-                  : "1px dashed rgb(200,200,200)",
               }}
-            />
+            >
+               <div 
+                className="absolute flex items-center justify-center text-center"
+                style={{left: "-12px", height: "24px", width: "24px", borderRadius: "12px",
+                border: darkMode
+                      ? "1px solid rgb(100,100,100)"
+                      : "1px solid rgb(200,200,200)",
+                color: darkMode
+                  ? "rgb(100,100,100)"
+                  : "rgb(200,200,200)",
+                }}>{grid.label}</div>
+
+                <div 
+                style={{borderLeft: darkMode
+                      ? "1px dashed rgb(100,100,100)"
+                      : "1px dashed rgb(200,200,200)"}}>
+                </div>
+            </div>
           ))}
 
           {/* Racks */}
@@ -191,7 +223,8 @@ const PanView = (props) => {
                   top: `${rack.z - 42/2}px`,
                   width: "24px",
                   height: "42px",
-                  backgroundColor: darkMode
+                  backgroundColor: selectedRack && selectedRack.id ===rack.id ? "rgb(0,150,255)" :
+                  darkMode
                     ? "rgb(200,200,200)"
                     : "rgb(100,100,100)",
                   border: darkMode
@@ -202,7 +235,7 @@ const PanView = (props) => {
                 className={`w-[40px] h-[20px] text-[10px] text-center ${
                   darkMode ? "darkMode-bg" : "lightMode-bg"
                 } ${darkMode ? "darkMode-border" : "lightMode-border"} border-2px`}
-                onClick={(e) => props.setSelectedRack(rack)}
+                onClick={(e) => handleClick(rack)}
               ></div>
             ))}
         </div>
