@@ -219,7 +219,7 @@ const View = (props) => {
   return (
     <div className="flex flex-col w-full overflow-hidden">
       
-      <div className={`flex justify-end text-[12px] align-items-center w-full p-2 flex-wrap ${darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"}`}>
+      <div className={`flex justify-end text-[12px] align-items-center w-full p-2 flex-wrap ${darkMode ? "darkMode-bg" : "bg-[rgb(235,235,235)]"}`}>
     
         {viewType !=="3D" && <div className="me-4">
           <Slider 

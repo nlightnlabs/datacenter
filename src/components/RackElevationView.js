@@ -9,9 +9,8 @@ const RackElevationView = (props) => {
 
   const [servers, setServers] = useState(props.servers);
   const [rackServers, setRackServers] = useState([])
-  const selectedRack = props.selectedRack
-  const setSelectedRack = props.setSelectedRack
   const [selectedServer, setSelectedServer] = useState(props.selectedServer);
+  const [selectedRack, setSelectedRack] = useState(props.selectedRack)
 
   const [showStatus, setShowStatus] = useState(true)
   const [showFloatingPanel, setShowFloatingPanel] = useState(false)
@@ -38,6 +37,8 @@ const RackElevationView = (props) => {
   const clearSelection = ()=>{
     props.setSelectedServer(null)
     props.setSelectedRack(null)
+    setSelectedRack(null)
+    setSelectedServer(null)
   }
 
 

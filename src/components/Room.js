@@ -39,11 +39,12 @@ const Room = (props) => {
   const getServers = ()=>{
 
     if(selectedRoom){
-      let servers = serverData.filter(i=>i.room_name === selectedRoom)
-      setServers(servers)
+      let serversData = serverData.filter(i=>i.room_name === selectedRoom)
+      setServers(serversData)
+      console.log("Servers", serversData)
     
       let rack_list = new Set()
-    servers.map(item =>{
+      serversData.map(item =>{
       if(item.room_name === selectedRoom){
         rack_list.add(item.rack_id)
       }
@@ -69,6 +70,7 @@ const Room = (props) => {
       }
       racks = [...racks,rack]
     })
+    console.log("racks", racks)
     setRacks(racks)
     }
   }
@@ -98,6 +100,7 @@ const Room = (props) => {
   }
 
   useEffect(()=>{
+    console.log("selected server", selectedServer)
     getRooms()
     getStatuses()
     getServers()
@@ -129,7 +132,7 @@ const Room = (props) => {
       <div className={`${darkMode? "darkMode-text":"black"} ms-[10%]`}>Room:</div> 
       <div className="font-bold">
         <select className={`w-[300px] bg-[rgba(0,0,0,0)] ${darkMode?"darkMode-text" : "lightMode-text"}`} 
-        onChange={handleRoomChange} value={selectedRoom}>
+        onChange={(e)=>handleRoomChange(e)} value={selectedRoom}>
           {rooms.map((item,index)=>(
             <option className="ps-3 me-3 text-[18px]" key={index} value={item}>{item}</option>
           ))}

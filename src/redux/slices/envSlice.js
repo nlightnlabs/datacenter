@@ -9,7 +9,7 @@ export const envSlice = createSlice({
     fileStorageBucket: "",
     logoFile: "",
     theme: "",
-    darkMode: false
+    darkMode: true
   },
   reducers: {
     setAppName: (state, action) => {

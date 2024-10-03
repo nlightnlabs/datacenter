@@ -5,8 +5,8 @@ import "../App.css";
 const PanView = (props) => {
   const darkMode = props.darkMode || false;
 
-  const [servers, setServers] = useState(props.servers);
-  const [racks, setRacks] = useState(props.racks);
+  const servers = props.servers
+  const racks = props.racks
   const [rackServers, setRackServers] = useState([]);
   const [selectedRack, setSelectedRack] = useState(props.selectedRack);
 
@@ -30,7 +30,7 @@ const PanView = (props) => {
     servers.forEach((item) => {
       const gridData = {
         label: item.row,
-        z: item.z,
+        z: item.grid_z,
       };
       horizontalGrids.add(gridData);
     });
@@ -39,7 +39,7 @@ const PanView = (props) => {
     servers.forEach((item) => {
       const gridData = {
         label: item.column,
-        x: item.x,
+        x: item.grid_x,
       };
       verticalGrids.add(gridData);
     });
@@ -57,6 +57,8 @@ const PanView = (props) => {
   };
 
   useEffect(() => {
+    console.log("racks", racks)
+    console.log("servers", servers)
     getGrids();
   }, [props]);
 
@@ -96,6 +98,7 @@ const PanView = (props) => {
   const clearSelection = ()=>{
     props.setSelectedServer(null)
     props.setSelectedRack(null)
+    setSelectedRack(null)
   }
 
   const handleClick = (rack)=>{
@@ -104,10 +107,10 @@ const PanView = (props) => {
   } 
 
   return (
-    <div className="flex flex-col h-full w-full justify-center items-top overflow-hidden">
+    <div className="fade-in flex flex-col h-full w-full justify-center items-top overflow-hidden transition duration-500">
       <div
         className={`flex justify-end text-[12px] align-items-center w-full p-2 flex-wrap ${
-          darkMode ? "bg-[rgb(100,100,100)]" : "bg-[rgb(235,235,235)]"
+          darkMode ? "darkMode-bg" : "bg-[rgb(235,235,235)]"
         }`}
       >
         <div className="me-4">
@@ -124,7 +127,7 @@ const PanView = (props) => {
         </div>
 
         <div className={`${darkMode? "darkMode-button" : "lightMode-button"} w-[100px]`}
-        onClick = {(e)=>clearSelection(null)}
+        onClick = {(e)=>clearSelection()}
         >
           Clear
         </div>
@@ -158,13 +161,13 @@ const PanView = (props) => {
               style={{
                 position: "absolute",
                 top: `${grid.z}px`,
-                left: `${-100}px`,
+                left: `${-75}px`,
                 width: `${gridContainerWidth+100}px`,
               }}
             >
             <div 
             className="absolute flex items-center justify-center text-center"
-            style={{top: "-12px", height: "24px", width: "24px", borderRadius: "12px",
+            style={{top: "-10px", height: "20px", width: "20px", borderRadius: "10px",
             border: darkMode
                   ? "1px solid rgb(100,100,100)"
                   : "1px solid rgb(200,200,200)",
@@ -174,8 +177,8 @@ const PanView = (props) => {
             }}>{grid.label}</div>
 
             <div 
-            className="ms-[24px]"
-            style={{left: "24px", borderTop: darkMode
+            className="ms-[20px]"
+            style={{left: "20px", borderTop: darkMode
                   ? "1px dashed rgb(100,100,100)"
                   : "1px dashed rgb(200,200,200)"}}></div>
             </div>
@@ -188,14 +191,14 @@ const PanView = (props) => {
               key={`vertical-grid-${index}`}
               style={{
                 position: "absolute",
-                left: `${grid.x+12}px`,
-                top: "-100px",
+                left: `${grid.x}px`,
+                top: "-75px",
                 height: "100%",
               }}
             >
                <div 
-                className="flex items-center justify-center text-center"
-                style={{left: "-12px", height: "24px", width: "24px", borderRadius: "12px",
+                className="flex items-center justify-center text-center text-[12px]"
+                style={{marginLeft: "-10px", height: "20px", width: "20px", borderRadius: "10px",
                 border: darkMode
                       ? "1px solid rgb(100,100,100)"
                       : "1px solid rgb(200,200,200)",
@@ -205,7 +208,9 @@ const PanView = (props) => {
                 }}>{grid.label}</div>
 
                 <div 
-                style={{borderLeft: darkMode
+                className="h-100"
+                style={{
+                      borderLeft: darkMode
                       ? "1px dashed rgb(100,100,100)"
                       : "1px dashed rgb(200,200,200)"}}>
                 </div>
@@ -219,22 +224,17 @@ const PanView = (props) => {
                 key={i + 1}
                 style={{
                   position: "absolute",
-                  left: `${rack.x - 24/2}px`,
+                  left: `${rack.x  -24/2}px`,
                   top: `${rack.z - 42/2}px`,
                   width: "24px",
                   height: "42px",
-                  backgroundColor: selectedRack && selectedRack.id ===rack.id ? "rgb(0,150,255)" :
-                  darkMode
-                    ? "rgb(200,200,200)"
-                    : "rgb(100,100,100)",
-                  border: darkMode
-                    ? "1px solid rgb(100,100,100)"
-                    : "1px solid rgb(200,200,200)",
                   cursor: "pointer"
                 }}
-                className={`w-[40px] h-[20px] text-[10px] text-center ${
-                  darkMode ? "darkMode-bg" : "lightMode-bg"
-                } ${darkMode ? "darkMode-border" : "lightMode-border"} border-2px`}
+                className={
+                  `w-[40px] h-[20px] text-[10px] text-center border-[1px]
+                  ${selectedRack && selectedRack.id ===rack.id ? "bg-[rgb(0,150,255)]" : "bg-[rgb(200,200,220)]"}
+                  ${selectedRack && selectedRack.id ===rack.id ? "border-[rgb(0,100,200)]" : "border-[rgb(150,150,150)]"}
+                `}
                 onClick={(e) => handleClick(rack)}
               ></div>
             ))}
